@@ -22,6 +22,14 @@
 		},
 		"web": {
 			"favicon": "./assets/favicon.png"
-		}
+		},
+		"plugins": [
+			[
+				"expo-image-picker",
+				{
+					"photosPermission": "The app accesses your photos to let you set you profile picture, your establishment logo and your menu items image."
+				}
+			]
+		]
 	}
 }
