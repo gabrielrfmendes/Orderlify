@@ -6,14 +6,19 @@ import { PaperProvider, Text, Button } from 'react-native-paper';
 import Auth from './screens/Auth';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import EateryListScreen from './screens/EateryList';
+import { EateryProvider, useEatery } from './contexts/Eatery';
+import CustomNavigationBar from './components/CustomNavigationBar';
 
 function HomeScreen() {
 	const { removeAccessToken } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
+	const { selectEatery } = useEatery();
 
 	async function signOut() {
 		setIsLoading(true);
 		await removeAccessToken();
+		selectEatery(null);
 		setIsLoading(false);
 	}
 
@@ -37,15 +42,27 @@ const Stack = createNativeStackNavigator();
 
 function AppNavigator() {
 	const { accessToken } = useAuth();
+	const { selectedEatery } = useEatery();
 
 	return (
 		<NavigationContainer>
-			<Stack.Navigator>
+			<Stack.Navigator
+				screenOptions={{
+					header: (props) => <CustomNavigationBar {...props} />,
+					animation: 'slide_from_right',
+				}}
+			>
 				{!accessToken ? (
 					<Stack.Screen
 						name="Auth"
 						component={Auth}
 						options={{ headerShown: false }}
+					/>
+				) : !selectedEatery ? (
+					<Stack.Screen
+						name="SelectEatery"
+						component={EateryListScreen}
+						options={{ title: 'Selecionar estabelecimento' }}
 					/>
 				) : (
 					<Stack.Screen name="Home" component={HomeScreen} />
@@ -60,7 +77,9 @@ function App() {
 		<PaperProvider>
 			<AuthProvider>
 				<ActionSheetProvider>
-					<AppNavigator />
+					<EateryProvider>
+						<AppNavigator />
+					</EateryProvider>
 				</ActionSheetProvider>
 			</AuthProvider>
 		</PaperProvider>
