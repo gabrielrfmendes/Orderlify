@@ -7,7 +7,13 @@ import React, {
 	useCallback,
 	ReactNode,
 } from 'react';
-import { View, Animated, BackHandler, LayoutChangeEvent } from 'react-native';
+import {
+	View,
+	Animated,
+	BackHandler,
+	LayoutChangeEvent,
+	StyleSheet,
+} from 'react-native';
 
 type Props = {
 	children?: ReactNode;
@@ -18,11 +24,10 @@ export type StepperHandler = {
 	stepBackward: () => void;
 };
 
-function Stepper({ children }: Props, ref: StepperHendler) {
+function Stepper({ children }: Props, ref: React.Ref<StepperHandler>) {
 	const [currentIndex, setCurrentIndex] = useState(0);
-	const [stepWidth, setStepWidth] = useState('100%');
+	const [stepWidth, setStepWidth] = useState(0);
 	const slideAnim = useRef(new Animated.Value(0)).current;
-	const isLayoutMeasured = useRef(false);
 
 	const handleBackPress = useCallback(() => {
 		if (currentIndex > 0) {
@@ -48,11 +53,12 @@ function Stepper({ children }: Props, ref: StepperHendler) {
 	function stepForward() {
 		if (currentIndex + 1 < childrenArray.length) {
 			Animated.timing(slideAnim, {
-				toValue: -stepWidth * (currentIndex + 1),
-				duration: 100,
+				toValue: -(currentIndex + 1) * stepWidth,
+				duration: 300,
 				useNativeDriver: true,
 			}).start(() => {
 				setCurrentIndex(currentIndex + 1);
+				slideAnim.setValue(-(currentIndex + 1) * stepWidth);
 			});
 		}
 	}
@@ -60,41 +66,59 @@ function Stepper({ children }: Props, ref: StepperHendler) {
 	function stepBackward() {
 		if (currentIndex > 0) {
 			Animated.timing(slideAnim, {
-				toValue: -stepWidth * (currentIndex - 1),
-				duration: 100,
+				toValue: -(currentIndex - 1) * stepWidth,
+				duration: 300,
 				useNativeDriver: true,
 			}).start(() => {
 				setCurrentIndex(currentIndex - 1);
+				slideAnim.setValue(-(currentIndex - 1) * stepWidth);
 			});
 		}
 	}
 
 	function onStepperLayout(event: LayoutChangeEvent) {
-		if (!isLayoutMeasured.current) {
-			const { width } = event.nativeEvent.layout;
-			setStepWidth(width);
-			isLayoutMeasured.current = true;
-		}
+		const { width } = event.nativeEvent.layout;
+		setStepWidth(width);
 	}
 
 	const childrenArray = React.Children.toArray(children);
 
 	return (
-		<Animated.View
-			style={{
-				flex: 1,
-				flexDirection: 'row',
-				transform: [{ translateX: slideAnim }],
-			}}
-			onLayout={onStepperLayout}
-		>
-			{childrenArray.map((child, index) => (
-				<View key={index} style={{ width: stepWidth }}>
-					{child}
-				</View>
-			))}
-		</Animated.View>
+		<View style={styles.container} onLayout={onStepperLayout}>
+			<Animated.View
+				style={[
+					styles.animatedContainer,
+					{
+						width: stepWidth * childrenArray.length,
+						transform: [{ translateX: slideAnim }],
+					},
+				]}
+			>
+				{childrenArray.map((child, index) => (
+					<View
+						key={index}
+						style={[styles.stepContainer, { width: stepWidth }]}
+					>
+						{child}
+					</View>
+				))}
+			</Animated.View>
+		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		overflow: 'hidden',
+	},
+	animatedContainer: {
+		flexDirection: 'row',
+		flex: 1,
+	},
+	stepContainer: {
+		flex: 1,
+	},
+});
 
 export default forwardRef(Stepper);
