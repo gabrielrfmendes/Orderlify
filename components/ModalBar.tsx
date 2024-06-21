@@ -1,7 +1,13 @@
+import React from 'react';
 import { Appbar } from 'react-native-paper';
-import { getHeaderTitle } from '@react-navigation/elements';
+import { getHeaderTitle, StackHeaderProps } from '@react-navigation/elements';
 
-export default function ModalBar({ navigation, route, options, back }) {
+export default function ModalBar({
+	navigation,
+	route,
+	options,
+	back,
+}: StackHeaderProps) {
 	const title = getHeaderTitle(options, route.name);
 
 	return (

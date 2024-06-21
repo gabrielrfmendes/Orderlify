@@ -9,6 +9,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import EateryListScreen from './screens/EateryList';
 import { EateryProvider, useEatery } from './contexts/Eatery';
 import CustomNavigationBar from './components/CustomNavigationBar';
+import ModalBar from './components/ModalBar';
+import NewEateryScreen from './screens/NewEatery';
 
 function HomeScreen() {
 	const { removeAccessToken } = useAuth();
@@ -59,11 +61,23 @@ function AppNavigator() {
 						options={{ headerShown: false }}
 					/>
 				) : !selectedEatery ? (
-					<Stack.Screen
-						name="SelectEatery"
-						component={EateryListScreen}
-						options={{ title: 'Selecionar estabelecimento' }}
-					/>
+					<>
+						<Stack.Screen
+							name="SelectEatery"
+							component={EateryListScreen}
+							options={{ title: 'Selecionar estabelecimento' }}
+						/>
+						<Stack.Screen
+							name="NewEatery"
+							component={NewEateryScreen}
+							options={{
+								title: 'Novo estabelecimento',
+								presentation: 'modal',
+								header: (props) => <ModalBar {...props} />,
+								animation: 'slide_from_bottom',
+							}}
+						/>
+					</>
 				) : (
 					<Stack.Screen name="Home" component={HomeScreen} />
 				)}
