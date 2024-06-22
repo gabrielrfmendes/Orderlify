@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 /* eslint-disable */
 const errorMock = {
 	response: {
@@ -76,7 +78,6 @@ const eateries = [
 			{ day: 'Thursday', open: '06:00', close: '20:00' },
 			{ day: 'Friday', open: '06:00', close: '21:00' },
 			{ day: 'Saturday', open: '07:00', close: '21:00' },
-			{ day: 'Sunday', open: '07:00', close: '19:00' },
 		],
 		memberRole: 'manager',
 	},
@@ -165,4 +166,13 @@ export function deleteRequest(requestId: number) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => resolve(), 1000);
 	});
+}
+
+export async function getAddressByCEP(cep: string) {
+	try {
+		const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+		return response;
+	} catch (error) {
+		throw Error(error);
+	}
 }

@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import AppBackground from '../../components/AppBackground';
 import Stepper, { StepperHandler } from '../../components/Stepper';
 import BasicDataStep from './BasicDataStep';
+import AddressStep from './AddressStep';
 
 export interface NewEateryStepProps {
 	isFocused: boolean;
@@ -19,7 +20,7 @@ export default function NewEatery() {
 	}
 
 	function stepBackward() {
-		stepperRef.current?.stepForward();
+		stepperRef.current?.stepBackward();
 		setCurrentStepIndex(currentStepIndex - 1);
 	}
 
@@ -28,6 +29,11 @@ export default function NewEatery() {
 			<Stepper ref={stepperRef}>
 				<BasicDataStep
 					isFocused={currentStepIndex === 0}
+					stepForward={stepForward}
+					stepBackward={stepBackward}
+				/>
+				<AddressStep
+					isFocused={currentStepIndex === 1}
 					stepForward={stepForward}
 					stepBackward={stepBackward}
 				/>
