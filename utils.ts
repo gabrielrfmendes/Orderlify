@@ -71,3 +71,27 @@ export function isEateryOpen(eatery: Eatery) {
 
 	return currentTime >= open && currentTime <= close;
 }
+
+export const weekDays = [
+	'Sunday',
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+];
+
+const translatedWeekDays = {
+	Sunday: 'Domingo',
+	Monday: 'Segunda-feira',
+	Tuesday: 'Terça-feira',
+	Wednesday: 'Quarta-feira',
+	Thursday: 'Quinta-feira',
+	Friday: 'Sexta-feira',
+	Saturday: 'Sábado',
+};
+
+export function translateWeekDay(weekDay) {
+	return translatedWeekDays[weekDay] || 'Dia inválido';
+}
