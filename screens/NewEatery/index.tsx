@@ -4,6 +4,7 @@ import Stepper, { StepperHandler } from '../../components/Stepper';
 import BasicDataStep from './BasicDataStep';
 import AddressStep from './AddressStep';
 import OpeningHoursStep from './OpeningHoursStep';
+import MenuStep from './MenuStep';
 
 export interface NewEateryStepProps {
 	isFocused: boolean;
@@ -40,6 +41,11 @@ export default function NewEatery() {
 				/>
 				<OpeningHoursStep
 					isFocused={currentStepIndex === 2}
+					stepForward={stepForward}
+					stepBackward={stepBackward}
+				/>
+				<MenuStep
+					isFocused={currentStepIndex === 3}
 					stepForward={stepForward}
 					stepBackward={stepBackward}
 				/>

@@ -95,3 +95,30 @@ const translatedWeekDays = {
 export function translateWeekDay(weekDay) {
 	return translatedWeekDays[weekDay] || 'Dia inválido';
 }
+
+export function formatMonetaryValue(value: number) {
+	let numberValue;
+
+	if (typeof value === 'string') {
+		numberValue = parseFloat(value.replace(',', '.'));
+
+		if (isNaN(numberValue)) {
+			throw new Error('O formato do valor é inválido');
+		}
+	} else if (typeof value === 'number') {
+		numberValue = value;
+	} else {
+		throw new Error(
+			'O valor deve ser um número ou uma string representando um número'
+		);
+	}
+
+	const formattedValue = numberValue.toFixed(2);
+	const [integerPart, decimalPart] = formattedValue.split('.');
+	const integerWithDots = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+	const cents = parseInt(decimalPart);
+	const centsString =
+		cents === 0 ? '' : `,${cents.toString().padStart(2, '0')}`;
+
+	return `R$ ${integerWithDots}${centsString}`;
+}

@@ -9,3 +9,15 @@ export interface Eatery {
 	}[];
 	memberRole?: 'manager' | 'waiter' | 'chef' | 'removed';
 }
+
+export interface MenuItem {
+	id: number;
+	name: string;
+	price: number;
+	pictureUri: string | null;
+	ingredients: {
+		id: number;
+		name: string;
+		quantity: number;
+	}[];
+}
