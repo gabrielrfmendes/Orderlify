@@ -35,3 +35,15 @@ export function getMenuItems() {
 		}, 2000);
 	});
 }
+
+export function saveMenuItem(data: any) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve({
+				data: {
+					insertId: Math.floor(Math.random() * 100),
+				},
+			});
+		}, 2000);
+	});
+}

@@ -9,7 +9,7 @@ interface TextFieldProps extends TextInputProps {
 function TextField({ validationMessage, ...props }: TextFieldProps) {
 	return (
 		<View>
-			<TextInput {...props} ref={props.reference} />
+			<TextInput dense {...props} ref={props.reference} />
 			<HelperText
 				type="error"
 				visible={!!props.error}

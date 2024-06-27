@@ -122,3 +122,29 @@ export function formatMonetaryValue(value: number) {
 
 	return `R$ ${integerWithDots}${centsString}`;
 }
+
+export function formatMonetaryInput(amount: string) {
+	let reais = '0';
+	let cents = '00';
+
+	amount = amount.replace(/[^0-9]/g, '');
+
+	if (amount.length > 2) {
+		reais = amount.substring(0, amount.length - 2);
+		cents = amount.substring(amount.length - 2, amount.length);
+	} else {
+		if (amount.length === 1) {
+			cents = `0${amount}`;
+		}
+
+		if (amount.length === 2) {
+			cents = amount;
+		}
+	}
+
+	reais = reais
+		.replace(/^(0+)(\d)/g, '$2')
+		.replace(/(\d)(?=(\d{3})+(\.(\d){0,2})*$)/g, '$1.');
+
+	return `R$ ${reais},${cents}`;
+}

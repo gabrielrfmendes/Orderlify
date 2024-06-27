@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useTheme, Text, Button, List, FAB, Divider } from 'react-native-paper';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { NewEateryStepProps } from './';
 import { MenuItem } from '../../types';
 import { getMenuItems } from '../../services/menu';
@@ -68,6 +69,7 @@ export default function MenuStep(props: NewEateryStepProps) {
 	const [menuItems, setMenuItems] = useState([]);
 	const window = useWindowDimensions();
 	const { colors } = useTheme();
+	const navigation = useNavigation();
 
 	useEffect(() => {
 		async function listMenuItems() {
@@ -169,7 +171,7 @@ export default function MenuStep(props: NewEateryStepProps) {
 			</View>
 			<FAB
 				icon="hamburger-plus"
-				onPress={() => navigation.navigate('CreateMenuItem')}
+				onPress={() => navigation.navigate('NewMenuItem')}
 				background={colors.primaryContainer}
 				color={colors.onPrimaryContainer}
 				style={{
