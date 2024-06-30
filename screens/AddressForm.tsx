@@ -132,7 +132,7 @@ export default function AddresFormScreen() {
 			setStreetValidationMessage('Insira a rua');
 			invalidFields++;
 
-			if (invalidfields === 0) {
+			if (invalidFields === 0) {
 				focusFirstInvalidField = streetInputRef.current?.focus;
 			}
 		}
