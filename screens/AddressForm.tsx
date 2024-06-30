@@ -1,18 +1,26 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-	useWindowDimensions,
-	ScrollView,
-	View,
-	Keyboard,
-	Modal,
-	ActivityIndicator,
-} from 'react-native';
-import { useTheme, Text, Divider, Button } from 'react-native-paper';
-import TextField from '../../components/TextField';
-import { getAddressByCEP } from '../../services/eatery';
-import { NewEateryStepProps } from './';
+import { ScrollView, View, ActivityIndicator } from 'react-native';
+import AppBackground from '../components/AppBackground';
+import { useTheme, Button, TextInput } from 'react-native-paper';
+import TextField from '../components/TextField';
+import { getAddressByCEP } from '../services/eatery';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-export default function AddressStep(props: NewEateryStepProps) {
+function formatPostalCodeInput(input: string) {
+	let digits = input.replace(/\D/g, '');
+
+	if (digits.length > 8) {
+		digits = digits.slice(0, 8);
+	}
+
+	if (digits.length <= 5) {
+		return digits;
+	} else {
+		return `${digits.slice(0, 5)}-${digits.slice(5)}`;
+	}
+}
+
+export default function AddresFormScreen() {
 	const [postalCode, setPostalCode] = useState('');
 	const [postalCodeValidationMessage, setPostalCodeValidationMessage] =
 		useState('');
@@ -27,31 +35,30 @@ export default function AddressStep(props: NewEateryStepProps) {
 		useState('');
 	const [city, setCity] = useState('');
 	const [state, setState] = useState('');
-	const [isMounted, setIsMounted] = useState(false);
 	const postalCodeInputRef = useRef();
 	const streetInputRef = useRef();
 	const addressNumberInputRef = useRef();
 	const neighborhoodInputRef = useRef();
 	const scrollViewRef = useRef();
 	const theme = useTheme();
-	const window = useWindowDimensions();
+	const navigation = useNavigation();
+	const route = useRoute();
 
 	useEffect(() => {
-		if (props.isFocused) {
-			setIsMounted(true);
+		const address = route.params.address;
+
+		if (address) {
+			setPostalCode(address.postalCode);
+			setStreet(address.street);
+			setAddressNumber(address.addressNumber);
+			setNeighborhood(address.neighborhood);
+			setCity(address.city);
+			setState(address.state);
 		}
-	}, [props.isFocused]);
+	}, [route]);
 
 	function handlePostalCodeChange(text: string) {
-		let numericText: string = text.replace(/[^0-9]/g, '');
-
-		if (numericText.length > 8) {
-			numericText = numericText.slice(0, -1);
-		}
-
-		const maskedText = numericText.replace(/\b(\d{5})(\d{3})\b/g, '$1-$2');
-
-		setPostalCode(maskedText);
+		setPostalCode(formatPostalCodeInput(text));
 		setPostalCodeValidationMessage('');
 	}
 
@@ -81,7 +88,7 @@ export default function AddressStep(props: NewEateryStepProps) {
 				addressNumberInputRef.current?.focus();
 			}
 		} else {
-			setPostalCodeValidationMessage('CEP não encontrado');
+			setPostalCodeValidationMessage('CEP inválido');
 			postalCodeInputRef.current?.focus();
 		}
 	}
@@ -101,101 +108,65 @@ export default function AddressStep(props: NewEateryStepProps) {
 		setNeighborhood(text);
 	}
 
-	function handleValidateEateryData() {
+	function handleSave() {
 		let invalidFields = 0;
-		let firstInvalidField = null;
+		let focusFirstInvalidField = () => {};
 
 		if (!postalCode.length) {
-			setPostalCodeValidationMessage('O CEP é obrigatório');
+			setPostalCodeValidationMessage('Insira o CEP');
 			invalidFields++;
 
-			scrollViewRef.current.scrollTo({ y: 0 });
-			firstInvalidField = postalCodeInputRef.current?.focus;
+			focusFirstInvalidField = postalCodeInputRef.current?.focus;
 		}
 
 		if (!neighborhood.length) {
-			setNeighborhoodValidationMessage('O bairro é obrigatório');
+			setNeighborhoodValidationMessage('Insira o bairro');
 			invalidFields++;
 
-			if (!firstInvalidField) {
-				scrollViewRef.current.scrollTo({ y: 8 });
-				firstInvalidField = neighborhoodInputRef.current?.focus;
+			if (invalidFields === 0) {
+				focusFirstInvalidField = neighborhoodInputRef.current?.focus;
 			}
 		}
 
 		if (!street.length) {
-			setStreetValidationMessage('A rua é obrigatória');
+			setStreetValidationMessage('Insira a rua');
 			invalidFields++;
 
-			if (!firstInvalidField) {
-				scrollViewRef.current.scrollTo({ y: 16 });
-				firstInvalidField = streetInputRef.current?.focus;
+			if (invalidfields === 0) {
+				focusFirstInvalidField = streetInputRef.current?.focus;
 			}
 		}
 
 		if (!addressNumber.length) {
-			setAddressNumberValidationMessage('Obrigatório');
+			setAddressNumberValidationMessage('Insira o número');
 			invalidFields++;
 
-			if (!firstInvalidField) {
-				scrollViewRef.current.scrollTo({ y: 16 });
-				firstInvalidField = addressNumberInputRef.current?.focus;
-			}
-		}
-
-		if (!addressNumber.length) {
-			setAddressNumberValidationMessage('Obrigatório');
-			invalidFields++;
-
-			if (!firstInvalidField) {
-				scrollViewRef.current.scrollTo({ y: 16 });
-				firstInvalidField = addressNumberInputRef.current?.focus;
+			if (!invalidFields === 0) {
+				focusFirstInvalidField = addressNumberInputRef.current?.focus;
 			}
 		}
 
 		if (invalidFields > 0) {
-			firstInvalidField();
+			focusFirstInvalidField();
 			return;
 		}
 
-		Keyboard.dismiss();
-
-		props.stepForward();
-	}
-
-	if (!isMounted) {
-		return <></>;
+		navigation.navigate('NewEatery', {
+			address: {
+				postalCode,
+				city,
+				state,
+				neighborhood,
+				street,
+				addressNumber,
+			},
+		});
 	}
 
 	return (
-		<ScrollView ref={scrollViewRef}>
-			<Modal visible={isAddressLoading} transparent animationType="fade">
-				<View
-					style={{
-						backgroundColor: 'rgba(0, 0, 0, 0.5)',
-						flex: 1,
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}
-				>
-					<ActivityIndicator size="large" />
-				</View>
-			</Modal>
-			<View
-				style={{
-					flex: 1,
-					width: window.width,
-				}}
-			>
-				<Text variant="labelLarge" style={{ marginBottom: 8, paddingLeft: 12 }}>
-					Endereço
-				</Text>
-				<View
-					style={{
-						gap: 4,
-						paddingHorizontal: 8,
-					}}
-				>
+		<AppBackground>
+			<ScrollView ref={scrollViewRef}>
+				<View style={{ padding: 16 }}>
 					<TextField
 						reference={postalCodeInputRef}
 						onBlur={handlePostalCodeInputBlur}
@@ -211,10 +182,27 @@ export default function AddressStep(props: NewEateryStepProps) {
 						autoFocus
 						error={!!postalCodeValidationMessage}
 						validationMessage={postalCodeValidationMessage}
+						left={<TextInput.Icon icon="mailbox" />}
+						right={
+							<TextInput.Icon
+								icon={(props) => (
+									<ActivityIndicator
+										animating={isAddressLoading}
+										color={theme.colors.primary}
+										{...props}
+									/>
+								)}
+							/>
+						}
 					/>
 					<View style={{ flexDirection: 'row', gap: 4 }}>
 						<View style={{ flex: 1 }}>
-							<TextField label="Cidade" value={city} editable={false} />
+							<TextField
+								label="Cidade"
+								value={city}
+								editable={false}
+								left={<TextInput.Icon icon="city" />}
+							/>
 						</View>
 						<TextField label="Estado" value={state} editable={false} />
 					</View>
@@ -229,6 +217,7 @@ export default function AddressStep(props: NewEateryStepProps) {
 						onChangeText={handleNeighborhoodChange}
 						error={!!neighborhoodValidationMessage}
 						validationMessage={neighborhoodValidationMessage}
+						left={<TextInput.Icon icon="map-marker" />}
 					/>
 					<View style={{ flexDirection: 'row', gap: 4 }}>
 						<View style={{ flex: 1 }}>
@@ -243,11 +232,12 @@ export default function AddressStep(props: NewEateryStepProps) {
 								onChangeText={handleStreetChange}
 								error={!!streetValidationMessage}
 								validationMessage={streetValidationMessage}
+								left={<TextInput.Icon icon="sign-direction" />}
 							/>
 						</View>
 						<TextField
 							reference={addressNumberInputRef}
-							onSubmitEditing={handleValidateEateryData}
+							onSubmitEditing={handleSave}
 							returnKeyType="done"
 							label="Número"
 							placeholder="Número"
@@ -258,37 +248,18 @@ export default function AddressStep(props: NewEateryStepProps) {
 							validationMessage={addressNumberValidationMessage}
 						/>
 					</View>
-					<View style={{ flexDirection: 'row' }}>
-						<Button style={{ flex: 1 }} onPress={props.stepBackward}>
-							Voltar
-						</Button>
-						<Button
-							mode="contained"
-							onPress={handleValidateEateryData}
-							style={{ flex: 1 }}
-						>
-							Continuar
-						</Button>
-					</View>
-					<Divider
-						style={{
-							marginHorizontal: 16,
-							marginTop: 8,
-						}}
-					/>
-					<Text
-						variant="labelMedium"
-						style={{
-							height: window.height / 3,
-							textAlign: 'center',
-							color: theme.colors.secondary,
-							paddingVertical: 8,
-						}}
-					>
-						Essas informações serão exibidas no seu cárdapio digital.
-					</Text>
 				</View>
+			</ScrollView>
+			<View
+				style={{
+					paddingHorizontal: 32,
+					paddingVertical: 16,
+				}}
+			>
+				<Button mode="contained" onPress={handleSave}>
+					Salvar
+				</Button>
 			</View>
-		</ScrollView>
+		</AppBackground>
 	);
 }

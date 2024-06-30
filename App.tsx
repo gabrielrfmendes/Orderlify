@@ -10,8 +10,9 @@ import EateryListScreen from './screens/EateryList';
 import { EateryProvider, useEatery } from './contexts/Eatery';
 import CustomNavigationBar from './components/CustomNavigationBar';
 import ModalBar from './components/ModalBar';
-import NewEateryScreen from './screens/NewEatery';
+import EateryFormScreen from './screens/EateryForm';
 import NewMenuItemScreen from './screens/NewMenuItem';
+import AddressFormScreen from './screens/AddressForm';
 
 function HomeScreen() {
 	const { removeAccessToken } = useAuth();
@@ -68,6 +69,16 @@ function AppNavigator() {
 							component={EateryListScreen}
 							options={{ title: 'Selecionar estabelecimento' }}
 						/>
+						<Stack.Screen
+							name="NewEatery"
+							component={EateryFormScreen}
+							options={{ title: 'Novo estabelecimento' }}
+						/>
+						<Stack.Screen
+							name="AddressForm"
+							component={AddressFormScreen}
+							options={{ title: 'Endereço' }}
+						/>
 						<Stack.Group
 							screenOptions={{
 								presentation: 'modal',
@@ -75,11 +86,6 @@ function AppNavigator() {
 								animation: 'slide_from_bottom',
 							}}
 						>
-							<Stack.Screen
-								name="NewEatery"
-								component={NewEateryScreen}
-								options={{ title: 'Novo estabelecimento' }}
-							/>
 							<Stack.Screen
 								name="NewMenuItem"
 								component={NewMenuItemScreen}
