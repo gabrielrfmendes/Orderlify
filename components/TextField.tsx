@@ -10,14 +10,7 @@ function TextField({ validationMessage, ...props }: TextFieldProps) {
 	return (
 		<View>
 			<TextInput dense {...props} ref={props.reference} />
-			<HelperText
-				type="error"
-				visible={!!props.error}
-				style={{
-					top: -4,
-					marginBottom: -8,
-				}}
-			>
+			<HelperText type="error" visible={!!props.error}>
 				{validationMessage}
 			</HelperText>
 		</View>
