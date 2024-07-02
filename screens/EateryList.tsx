@@ -62,7 +62,7 @@ const EateryListItem: React.FC<EateryListItemProps> = (props) => {
 							leftProps.style,
 							{ backgroundColor: theme.colors.surfaceVariant },
 						]}
-						icon="store"
+						icon="store-outline"
 						size={48}
 					/>
 				) : (
@@ -211,7 +211,7 @@ const RequestListItem: React.FC<RequestListItemProps> = (props) => {
 							leftProps.style,
 							{ backgroundColor: theme.colors.surfaceVariant },
 						]}
-						icon="store"
+						icon="store-outline"
 						size={48}
 					/>
 				) : (
@@ -272,7 +272,7 @@ const RequestsTab: React.FC = ({ requests, setRequests, setEateries }) => {
 				}}
 			>
 				<Icon
-					name="store-check"
+					name="store-check-outline"
 					color={theme.colors.onPrimaryContainer}
 					size={20}
 				/>
@@ -284,7 +284,11 @@ const RequestsTab: React.FC = ({ requests, setRequests, setEateries }) => {
 					...styles.actionSheetIconContainer,
 				}}
 			>
-				<Icon name="close" color={theme.colors.onErrorContainer} size={20} />
+				<Icon
+					name="close-outline"
+					color={theme.colors.onErrorContainer}
+					size={20}
+				/>
 			</View>,
 		];
 
@@ -410,7 +414,7 @@ const EateryListScreen: React.FC = () => {
 					...styles.actionSheetIconContainer,
 				}}
 			>
-				<Icon name="store-search" color="#F5F5F5" size={20} />
+				<Icon name="store-search-outline" color="#F5F5F5" size={20} />
 			</View>,
 			<View
 				key="2"
@@ -419,7 +423,7 @@ const EateryListScreen: React.FC = () => {
 					...styles.actionSheetIconContainer,
 				}}
 			>
-				<Icon name="store-plus" color="#F5F5F5" size={20} />
+				<Icon name="store-plus-outline" color="#F5F5F5" size={20} />
 			</View>,
 		];
 
@@ -485,7 +489,7 @@ const EateryListScreen: React.FC = () => {
 				</Tab.Navigator>
 				<Tooltip title="Adicionar estabelecimento">
 					<FAB
-						icon="store-plus"
+						icon="store-plus-outline"
 						onPress={showActionSheet}
 						background={colors.primaryContainer}
 						color={colors.onPrimaryContainer}
