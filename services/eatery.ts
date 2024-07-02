@@ -125,6 +125,48 @@ const requests = [
 	},
 ];
 
+interface OpeningHour {
+	weekDay: string;
+	openingTime: string;
+	closingTime: string;
+}
+
+interface Address {
+	postalCode: string;
+	city: string;
+	state: string;
+	neighborhood: string;
+	propertyNumber: string;
+}
+
+interface Eatery {
+	id: number;
+	pictureUri: string;
+	name: string;
+	phoneNumber: string;
+	address: Address;
+	openingHours: OpeningHour[];
+	memberRole: 'manager' | 'waiter' | 'chef' | 'removed' | null;
+	createdAt: string;
+}
+
+export function saveEatery(data: Eatery) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve({
+				data: {
+					eatery: {
+						id: Math.floor(Math.random() * 100) + 1,
+						createdAt: new Date(),
+					},
+				},
+			});
+
+			// reject(errorMock);
+		}, 2000);
+	});
+}
+
 export function getEateries() {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {

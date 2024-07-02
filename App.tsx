@@ -13,6 +13,9 @@ import ModalBar from './components/ModalBar';
 import EateryFormScreen from './screens/EateryForm';
 import NewMenuItemScreen from './screens/NewMenuItem';
 import AddressFormScreen from './screens/AddressForm';
+import OpeningHoursScreen from './screens/OpeningHours';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 function HomeScreen() {
 	const { removeAccessToken } = useAuth();
@@ -79,6 +82,11 @@ function AppNavigator() {
 							component={AddressFormScreen}
 							options={{ title: 'Endereço' }}
 						/>
+						<Stack.Screen
+							name="OpeningHours"
+							component={OpeningHoursScreen}
+							options={{ title: 'Horários de funcionamento' }}
+						/>
 						<Stack.Group
 							screenOptions={{
 								presentation: 'modal',
@@ -103,15 +111,19 @@ function AppNavigator() {
 
 function App() {
 	return (
-		<PaperProvider>
-			<AuthProvider>
-				<ActionSheetProvider>
-					<EateryProvider>
-						<AppNavigator />
-					</EateryProvider>
-				</ActionSheetProvider>
-			</AuthProvider>
-		</PaperProvider>
+		<GestureHandlerRootView style={{ flex: 1 }}>
+			<BottomSheetModalProvider>
+				<PaperProvider>
+					<AuthProvider>
+						<ActionSheetProvider>
+							<EateryProvider>
+								<AppNavigator />
+							</EateryProvider>
+						</ActionSheetProvider>
+					</AuthProvider>
+				</PaperProvider>
+			</BottomSheetModalProvider>
+		</GestureHandlerRootView>
 	);
 }
 

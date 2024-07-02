@@ -151,7 +151,8 @@ export default function AddresFormScreen() {
 			return;
 		}
 
-		navigation.navigate('NewEatery', {
+		navigation.goBack();
+		route.params.onSave({
 			address: {
 				postalCode,
 				city,
