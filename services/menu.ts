@@ -42,6 +42,7 @@ export function saveMenuItem(data: any) {
 			resolve({
 				data: {
 					insertId: Math.floor(Math.random() * 100),
+					pictureUri: null,
 				},
 			});
 		}, 2000);

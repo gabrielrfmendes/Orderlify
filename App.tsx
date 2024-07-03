@@ -10,10 +10,10 @@ import { EateryProvider, useEatery } from './contexts/Eatery';
 import CustomNavigationBar from './components/CustomNavigationBar';
 import ModalBar from './components/ModalBar';
 import EateryFormScreen from './screens/EateryForm';
-import NewMenuItemScreen from './screens/NewMenuItem';
 import AddressFormScreen from './screens/AddressForm';
 import OpeningHoursScreen from './screens/OpeningHours';
 import MenuScreen from './screens/Menu';
+import MenuItemFormScreen from './screens/MenuItemForm';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
@@ -65,20 +65,21 @@ function AppNavigator() {
 								header: (props) => <ModalBar {...props} />,
 								animation: 'slide_from_bottom',
 							}}
-						>
-							<Stack.Screen
-								name="NewMenuItem"
-								component={NewMenuItemScreen}
-								options={{ title: 'Novo produto' }}
-							/>
-						</Stack.Group>
+						></Stack.Group>
 					</>
 				) : (
-					<Stack.Screen
-						name="Menu"
-						component={MenuScreen}
-						option={{ title: 'Cardápio' }}
-					/>
+					<>
+						<Stack.Screen
+							name="Menu"
+							component={MenuScreen}
+							options={{ title: 'Menu' }}
+						/>
+						<Stack.Screen
+							name="MenuItemForm"
+							component={MenuItemFormScreen}
+							options={{ title: 'Novo produto' }}
+						/>
+					</>
 				)}
 			</Stack.Navigator>
 		</NavigationContainer>

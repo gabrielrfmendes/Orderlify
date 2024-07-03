@@ -11,6 +11,7 @@ import { useTheme, Text, List, FAB, Divider } from 'react-native-paper';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { getMenuItems } from '../services/menu';
 import { formatMonetaryValue } from '../utils';
+import { useNavigation } from '@react-navigation/native';
 
 interface MenuItem {
 	id: number;
@@ -30,6 +31,7 @@ interface MenuListItemProps {
 
 function MenuListItem(props: MenuListItemProps) {
 	const { colors } = useTheme();
+	const navigation = useNavigation();
 
 	return (
 		<List.Item
@@ -83,6 +85,7 @@ export default function MenuScreen() {
 	const [menuItems, setMenuItems] = useState([]);
 	const { colors } = useTheme();
 	const window = useWindowDimensions();
+	const navigation = useNavigation();
 
 	useEffect(() => {
 		async function listMenuItems() {
@@ -163,7 +166,13 @@ export default function MenuScreen() {
 			</ScrollView>
 			<FAB
 				icon="hamburger-plus"
-				onPress={() => navigation.navigate('MenuItemForm')}
+				onPress={() =>
+					navigation.navigate('MenuItemForm', {
+						onSave: (data) => {
+							setMenuItems([...menuItems, data.menuItem]);
+						},
+					})
+				}
 				background={colors.primaryContainer}
 				color={colors.onPrimaryContainer}
 				style={{

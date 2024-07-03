@@ -1,23 +1,17 @@
 import React, { useState, useRef } from 'react';
-import {
-	BackHandler,
-	TouchableOpacity,
-	Image,
-	ScrollView,
-	View,
-} from 'react-native';
-import AppBackground from '../../components/AppBackground';
+import { TouchableOpacity, Image, ScrollView, View } from 'react-native';
+import AppBackground from '../components/AppBackground';
 import { MaterialIcons } from '@expo/vector-icons';
 import ImageSelector, {
 	ImageSelectorHandler,
-} from '../../components/ImageSelector';
-import TextField from '../../components/TextField';
-import { useNavigation } from '@react-navigation/native';
+} from '../components/ImageSelector';
+import TextField from '../components/TextField';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme, Text, Button, RadioButton } from 'react-native-paper';
-import { formatMonetaryInput } from '../../utils';
-import { saveMenuItem } from '../../services/menu';
+import { formatMonetaryInput } from '../utils';
+import { saveMenuItem } from '../services/menu';
 
-export default function NewMenuItemScreen() {
+export default function MenuItemFormScreen() {
 	const [picture, setPicture] = useState('');
 	const [availability, setAvailability] = useState('ReadyToDelivery');
 	const [name, setName] = useState('');
@@ -32,20 +26,8 @@ export default function NewMenuItemScreen() {
 	const descriptionInputRef = useRef();
 	const priceInputRef = useRef();
 	const navigation = useNavigation();
+	const route = useRoute();
 	const { colors } = useTheme();
-
-	const handleBackPress = React.useCallback(() => {
-		navigation.goBack();
-		return true;
-	}, []);
-
-	React.useEffect(() => {
-		BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-
-		return () => {
-			BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
-		};
-	}, [handleBackPress]);
 
 	function handleNameChange(text: string) {
 		setNameValidationMessage('');
@@ -87,22 +69,32 @@ export default function NewMenuItemScreen() {
 
 		setIsLoading(true);
 
-		await saveMenuItem({
+		const menuItemUpdate = {
 			picture,
 			availability,
 			name,
 			description,
-			price,
+			price: Number(
+				price.replace('R$ ', '').replace('.', '').replace(',', '.')
+			),
 			category,
-		});
+		};
 
-		setIsLoading(false);
+		const response = await saveMenuItem(menuItemUpdate);
+
+		route.params.onSave({
+			menuItem: {
+				id: response.data.insertId,
+				...menuItemUpdate,
+			},
+		});
+		navigation.goBack();
 	}
 
 	return (
 		<AppBackground>
 			<ScrollView>
-				<View style={{ gap: 4, padding: 8 }}>
+				<View style={{ padding: 16 }}>
 					<View
 						style={{
 							flexDirection: 'row',
@@ -215,8 +207,14 @@ export default function NewMenuItemScreen() {
 						validationMessage={priceValidationMessage}
 						error={!!priceValidationMessage}
 					/>
-					<TouchableOpacity>
-						<TextField label="Categoria" editable={false} />
+					<TouchableOpacity
+						onPress={() => {
+							navigation.navigate('Categories', {
+								onSelect: setCategory,
+							});
+						}}
+					>
+						<TextField value={category} label="Categoria" editable={false} />
 					</TouchableOpacity>
 				</View>
 			</ScrollView>
