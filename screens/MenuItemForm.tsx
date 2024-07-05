@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { TouchableOpacity, Image, ScrollView, View } from 'react-native';
 import AppBackground from '../components/AppBackground';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -8,11 +8,27 @@ import ImageSelector, {
 import TextField from '../components/TextField';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useTheme, Text, Button, RadioButton } from 'react-native-paper';
-import { formatMonetaryInput } from '../utils';
-import { saveMenuItem } from '../services/menu';
+import { formatMonetaryInput, formatMonetaryValue } from '../utils';
+import { saveMenuItem, updateMenuItem } from '../services/menu';
+
+function extractObjectUpdates(oldObject, newObject) {
+	const updates = {};
+
+	for (const key in newObject) {
+		if (oldObject.hasOwnProperty(key)) {
+			if (newObject[key] !== oldObject[key]) {
+				updates[key] = newObject[key];
+			}
+		} else {
+			updates[key] = newObject[key];
+		}
+	}
+
+	return updates;
+}
 
 export default function MenuItemFormScreen() {
-	const [picture, setPicture] = useState('');
+	const [picture, setPicture] = useState({ uri: null });
 	const [availability, setAvailability] = useState('ReadyToDelivery');
 	const [name, setName] = useState('');
 	const [nameValidationMessage, setNameValidationMessage] = useState('');
@@ -28,6 +44,24 @@ export default function MenuItemFormScreen() {
 	const navigation = useNavigation();
 	const route = useRoute();
 	const { colors } = useTheme();
+
+	useEffect(() => {
+		const { menuItem } = route.params;
+
+		if (menuItem) {
+			navigation.setOptions({ title: 'Editar produto' });
+			setAvailability(menuItem.availability);
+			if (menuItem.pictureUri) {
+				setPicture({ uri: menuItem?.pictureUri });
+			}
+			setName(menuItem.name);
+			setDescription(menuItem.description);
+			setPrice(formatMonetaryValue(menuItem.price));
+			setCategory(menuItem.category || '');
+		} else {
+			navigation.setOptions({ title: 'Novo produto' });
+		}
+	}, []);
 
 	function handleNameChange(text: string) {
 		setNameValidationMessage('');
@@ -69,25 +103,66 @@ export default function MenuItemFormScreen() {
 
 		setIsLoading(true);
 
-		const menuItemUpdate = {
-			picture,
+		const menuItemData = {
 			availability,
 			name,
 			description,
 			price: Number(
 				price.replace('R$ ', '').replace('.', '').replace(',', '.')
 			),
-			category,
 		};
 
-		const response = await saveMenuItem(menuItemUpdate);
+		if (picture.uri) {
+			menuItemData.picture = picture;
+		}
 
-		route.params.onSave({
-			menuItem: {
-				id: response.data.insertId,
-				...menuItemUpdate,
-			},
-		});
+		if (category.length) {
+			menuItemData.category = category;
+		}
+
+		if (description.length) {
+			menuItemData.description = description;
+		}
+
+		if (route.params.menuItem) {
+			const oldMenuItem = Object.fromEntries(
+				Object.entries(route.params.menuItem).filter(
+					([key]) => !['pictureUri'].includes(key)
+				)
+			);
+
+			if (route.params.menuItem.pictureUri) {
+				oldMenuItem.picture = {
+					...picture,
+					uri: route.params.menuItem.pictureUri,
+				};
+
+				menuItemData.picture = picture;
+			}
+
+			if (oldMenuItem.picture.uri === menuItemData.picture.uri) {
+				delete menuItemData.picture;
+			}
+
+			const menuItemUpdates = extractObjectUpdates(oldMenuItem, menuItemData);
+
+			if (Object.keys(menuItemUpdates).length > 0) {
+				const response = await updateMenuItem(menuItemUpdates);
+
+				route.params.onSave({
+					...menuItemUpdates,
+					...response.data,
+				});
+			}
+		} else {
+			const response = await saveMenuItem(menuItemData);
+
+			route.params.onSave({
+				...response.data,
+				...menuItemData,
+			});
+		}
+
 		navigation.goBack();
 	}
 
@@ -130,7 +205,7 @@ export default function MenuItemFormScreen() {
 									imageSelectorRef.current.showOptions();
 								}}
 							>
-								{picture ? (
+								{picture.uri ? (
 									<Image
 										source={{ uri: picture.uri }}
 										style={{ height: '100%', width: '100%' }}
@@ -168,7 +243,7 @@ export default function MenuItemFormScreen() {
 									/>
 									<RadioButton.Item
 										label="Após preparo"
-										value="preparationRequired"
+										value="PreparationRequired"
 									/>
 								</RadioButton.Group>
 							</View>
@@ -176,7 +251,6 @@ export default function MenuItemFormScreen() {
 					</View>
 					<TextField
 						reference={nameInputRef}
-						autoFocus
 						label="Nome"
 						placeholder="Insira o nome do produto"
 						value={name}
@@ -188,6 +262,7 @@ export default function MenuItemFormScreen() {
 						error={!!nameValidationMessage}
 					/>
 					<TextField
+						multiline
 						reference={descriptionInputRef}
 						label="Descrição"
 						placeholder="Insira a descrição do produto"

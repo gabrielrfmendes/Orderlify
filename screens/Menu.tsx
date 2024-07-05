@@ -5,11 +5,18 @@ import {
 	View,
 	ScrollView,
 	Image,
-	ActivityIndicator,
+	Modal,
 } from 'react-native';
-import { useTheme, Text, List, FAB, Divider } from 'react-native-paper';
+import {
+	useTheme,
+	Text,
+	List,
+	FAB,
+	Divider,
+	ActivityIndicator,
+} from 'react-native-paper';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
-import { getMenuItems } from '../services/menu';
+import { getMenuItems, deleteMenuItem } from '../services/menu';
 import { formatMonetaryValue } from '../utils';
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,6 +34,8 @@ interface MenuItem {
 
 interface MenuListItemProps {
 	menuItem: MenuItem;
+	onUpdate: (menuItem: MenuItem) => void;
+	onDelete: () => void;
 }
 
 function MenuListItem(props: MenuListItemProps) {
@@ -38,6 +47,8 @@ function MenuListItem(props: MenuListItemProps) {
 			onPress={() =>
 				navigation.navigate('MenuItem', {
 					menuItem: props.menuItem,
+					onUpdate: props.onUpdate,
+					onDelete: props.onDelete,
 				})
 			}
 			style={{ paddingVertical: 0 }}
@@ -83,6 +94,7 @@ function MenuListItem(props: MenuListItemProps) {
 export default function MenuScreen() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [menuItems, setMenuItems] = useState([]);
+	const [isDeleting, setIsDeleting] = useState(false);
 	const { colors } = useTheme();
 	const window = useWindowDimensions();
 	const navigation = useNavigation();
@@ -100,6 +112,18 @@ export default function MenuScreen() {
 
 	return (
 		<AppBackground>
+			<Modal visible={isDeleting} transparent>
+				<View
+					style={{
+						flex: 1,
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}
+				>
+					<ActivityIndicator />
+				</View>
+			</Modal>
 			<ScrollView contentContainerStyle={{ flex: 1 }}>
 				{isLoading || menuItems.length === 0 ? (
 					<View
@@ -142,7 +166,36 @@ export default function MenuScreen() {
 				) : (
 					<>
 						{menuItems.map((menuItem) => (
-							<MenuListItem key={menuItem.id} menuItem={menuItem} />
+							<MenuListItem
+								key={menuItem.id}
+								menuItem={menuItem}
+								onUpdate={(updates) => {
+									setMenuItems(
+										menuItems.map((item) => {
+											if (item.id === menuItem.id) {
+												return {
+													...item,
+													...updates,
+												};
+											}
+											return item;
+										})
+									);
+								}}
+								onDelete={async () => {
+									setIsDeleting(true);
+									await deleteMenuItem({ id: menuItem.id });
+									setIsDeleting(false);
+									setMenuItems(
+										menuItems.filter((item) => {
+											if (item.id !== menuItem.id) {
+												return item;
+											}
+											return;
+										})
+									);
+								}}
+							/>
 						))}
 						<Divider
 							style={{
@@ -169,7 +222,7 @@ export default function MenuScreen() {
 				onPress={() =>
 					navigation.navigate('MenuItemForm', {
 						onSave: (data) => {
-							setMenuItems([...menuItems, data.menuItem]);
+							setMenuItems([...menuItems, data]);
 						},
 					})
 				}

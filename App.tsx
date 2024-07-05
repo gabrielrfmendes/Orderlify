@@ -2,6 +2,8 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { PaperProvider } from 'react-native-paper';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Auth from './screens/Auth';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
@@ -14,8 +16,7 @@ import AddressFormScreen from './screens/AddressForm';
 import OpeningHoursScreen from './screens/OpeningHours';
 import MenuScreen from './screens/Menu';
 import MenuItemFormScreen from './screens/MenuItemForm';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import MenuItemScreen from './screens/MenuItem';
 
 const Stack = createNativeStackNavigator();
 
@@ -79,6 +80,19 @@ function AppNavigator() {
 							component={MenuItemFormScreen}
 							options={{ title: 'Novo produto' }}
 						/>
+						<Stack.Group
+							screenOptions={{
+								presentation: 'modal',
+								header: (props) => <ModalBar {...props} />,
+								animation: 'slide_from_bottom',
+							}}
+						>
+							<Stack.Screen
+								name="MenuItem"
+								component={MenuItemScreen}
+								options={{ headerShown: false }}
+							/>
+						</Stack.Group>
 					</>
 				)}
 			</Stack.Navigator>
