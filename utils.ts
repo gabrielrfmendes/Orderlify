@@ -22,13 +22,30 @@ export function translateRole(role: Role): string {
 	}
 }
 
-export function getElapsedTime(timestamp) {
-	const currentTimestamp = new Date()
-		.toISOString()
-		.slice(0, 19)
-		.replace('T', ' ');
-	const now = new Date(currentTimestamp);
-	const elapsedTime = now.getTime() - new Date(timestamp);
+export function translateStatus(status) {
+	switch (status) {
+		case 'waiting':
+			return 'Em espera';
+		case 'preparing':
+			return 'Em preparo';
+		case 'ready':
+			return 'Pronto';
+		case 'delivered':
+			return 'Pagamento pendente';
+		case 'canceled':
+			return 'Cancelado';
+		case 'removed':
+			return 'Removido';
+		case 'paid':
+			return 'Finalizado';
+		default:
+			return 'Em espera';
+	}
+}
+
+export function getElapsedTime(timestamp: number) {
+	const now = Date.now();
+	const elapsedTime = now - new Date(timestamp);
 
 	const seconds = Math.floor(elapsedTime / 1000);
 	const minutes = Math.floor(seconds / 60);

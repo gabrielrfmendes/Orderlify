@@ -4,6 +4,7 @@ import Eatery from '../types';
 interface EateryContextData {
 	selectedEatery: Eatery | null;
 	selectEatery: (eatery: Eatery | null) => void;
+	newOrder: object;
 }
 
 interface EateryProviderProps {
@@ -14,8 +15,10 @@ const EateryContext = createContext<EateryContextData | undefined>(undefined);
 
 export const EateryProvider: React.FC<EateryProviderProps> = ({ children }) => {
 	const [selectedEatery, setSelectedEatery] = useState<Eatery | null>(null);
+	const [newOrder, setNewOrder] = useState<object | null>(null);
 
-	const selectEatery = async (eatery: Eatery | null) => {
+	const selectEatery = (eatery: Eatery | null) => {
+		setNewOrder(null);
 		setSelectedEatery(eatery);
 	};
 
@@ -24,6 +27,7 @@ export const EateryProvider: React.FC<EateryProviderProps> = ({ children }) => {
 			value={{
 				selectedEatery,
 				selectEatery,
+				newOrder,
 			}}
 		>
 			{children}

@@ -1,7 +1,7 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider, Appbar } from 'react-native-paper';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Auth from './screens/Auth';
@@ -17,8 +17,27 @@ import OpeningHoursScreen from './screens/OpeningHours';
 import MenuScreen from './screens/Menu';
 import MenuItemFormScreen from './screens/MenuItemForm';
 import MenuItemScreen from './screens/MenuItem';
+import HomeScreen from './screens/Home';
 
 const Stack = createNativeStackNavigator();
+
+function HomeHeader() {
+	const { selectedEatery } = useEatery();
+	const navigation = useNavigation();
+
+	return (
+		<Appbar.Header>
+			<Appbar.Content
+				title={selectedEatery.name}
+				onPress={() => navigation.navigate('Eateries')}
+			/>
+			<Appbar.Action
+				icon="store-cog-outline"
+				onPress={() => navigation.navigate('EaterySettings')}
+			/>
+		</Appbar.Header>
+	);
+}
 
 function AppNavigator() {
 	const { accessToken } = useAuth();
@@ -60,16 +79,36 @@ function AppNavigator() {
 							component={OpeningHoursScreen}
 							options={{ title: 'Horários de funcionamento' }}
 						/>
-						<Stack.Group
-							screenOptions={{
-								presentation: 'modal',
-								header: (props) => <ModalBar {...props} />,
-								animation: 'slide_from_bottom',
-							}}
-						></Stack.Group>
 					</>
 				) : (
 					<>
+						<Stack.Screen
+							name="Home"
+							component={HomeScreen}
+							options={{
+								header: () => <HomeHeader />,
+							}}
+						/>
+						<Stack.Screen
+							name="Eateries"
+							component={EateryListScreen}
+							options={{ title: 'Selecionar estabelecimento' }}
+						/>
+						<Stack.Screen
+							name="NewEatery"
+							component={EateryFormScreen}
+							options={{ title: 'Novo estabelecimento' }}
+						/>
+						<Stack.Screen
+							name="AddressForm"
+							component={AddressFormScreen}
+							options={{ title: 'Endereço' }}
+						/>
+						<Stack.Screen
+							name="OpeningHours"
+							component={OpeningHoursScreen}
+							options={{ title: 'Horários de funcionamento' }}
+						/>
 						<Stack.Screen
 							name="Menu"
 							component={MenuScreen}

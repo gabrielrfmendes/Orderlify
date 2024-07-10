@@ -79,6 +79,64 @@ function formatOpeningHours(openingHours: OpeningHour[]) {
 	return result.join('\n');
 }
 
+function formatTimerInput(input: string) {
+	let cleaned = input.replace(/\D/g, '');
+
+	if (input.length < 6 || (input.length === 7 && input.charAt(0) !== '0')) {
+		cleaned = cleaned.slice(0, -1);
+	}
+
+	const truncated = cleaned.substring(0, 4);
+	const padded = truncated.padStart(4, '0');
+	const hours = parseInt(padded.substring(0, 2), 10);
+	const minutes = parseInt(padded.substring(2, 4), 10);
+	const formattedHours = hours.toString();
+	const formattedMinutes = minutes.toString().padStart(2, '0');
+
+	return `${formattedHours}h ${formattedMinutes}m`;
+}
+
+function adjustTimer(timer: string) {
+	const regex = /^(\d+)h (\d+)m$/;
+	const match = timer.match(regex);
+
+	if (!match) {
+		return timer;
+	}
+
+	let hours = parseInt(match[1], 10);
+	let minutes = parseInt(match[2], 10);
+
+	if (minutes > 59) {
+		const extraHours = Math.floor(minutes / 60);
+		const remainingMinutes = minutes % 60;
+
+		hours += extraHours;
+		minutes = remainingMinutes;
+	}
+
+	const formattedHours = hours.toString();
+	const formattedMinutes = minutes.toString().padStart(2, '0');
+
+	return `${formattedHours}h ${formattedMinutes}m`;
+}
+
+function timeToMinutes(time: string): number {
+	const regex = /^(\d+)h (\d+)m$/;
+	const match = time.match(regex);
+
+	if (!match) {
+		throw new Error('Invalid format. Use "Xh Ym" format.');
+	}
+
+	const hours = parseInt(match[1], 10);
+	const minutes = parseInt(match[2], 10);
+
+	const totalMinutes = hours * 60 + minutes;
+
+	return totalMinutes;
+}
+
 export default function EateryFormScreen() {
 	const [picture, setPicture] = useState(null);
 	const [name, setName] = useState('');
@@ -88,6 +146,9 @@ export default function EateryFormScreen() {
 		useState('');
 	const [address, setAddress] = useState();
 	const [openingHours, setOpeningHours] = useState([]);
+	const [orderTimer, setOrderTimer] = useState('0h 00m');
+	const [orderTimerValidationMessage, setOrderTimerValidationMessage] =
+		useState('');
 	const [isLoading, setIsLoading] = useState(false);
 	const imageSelectorRef = useRef();
 	const nameInputRef = useRef();
@@ -110,6 +171,11 @@ export default function EateryFormScreen() {
 		setPhoneNumber(formatPhoneNumberInput(text));
 	}
 
+	function handleOrderTimerChange(text: string) {
+		setOrderTimerValidationMessage('');
+		setOrderTimer(formatTimerInput(text));
+	}
+
 	async function handleSave() {
 		let invalidFields = 0;
 		let focusFirstInvalidField = () => {};
@@ -130,6 +196,11 @@ export default function EateryFormScreen() {
 			invalidFields++;
 		}
 
+		if (timeToMinutes(orderTimer) < 10) {
+			setOrderTimerValidationMessage('O tempo de preparo mínimo é 10 minutos');
+			invalidFields++;
+		}
+
 		if (invalidFields > 0) {
 			focusFirstInvalidField();
 			return;
@@ -143,6 +214,7 @@ export default function EateryFormScreen() {
 			phoneNumber,
 			address,
 			openingHours,
+			orderTimer: timeToMinutes(orderTimer),
 		};
 
 		const result = await saveEatery(data);
@@ -299,6 +371,18 @@ export default function EateryFormScreen() {
 							}}
 						/>
 					</TouchableOpacity>
+					<TextField
+						left={<TextInput.Icon icon="timer-sand" />}
+						onBlur={() => setOrderTimer(adjustTimer(orderTimer))}
+						returnKeyType="next"
+						label="Tempo entrega dos pedidos"
+						value={orderTimer}
+						onChangeText={handleOrderTimerChange}
+						maxLength={7}
+						keyboardType="number-pad"
+						error={!!orderTimerValidationMessage}
+						validationMessage={orderTimerValidationMessage}
+					/>
 				</View>
 			</ScrollView>
 			<View

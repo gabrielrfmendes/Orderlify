@@ -21,6 +21,8 @@ const eateries = [
 			{ day: 'Saturday', open: '08:00', close: '22:00' },
 		],
 		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 50,
 	},
 	{
 		id: 3,
@@ -36,6 +38,8 @@ const eateries = [
 			{ day: 'Sunday', open: '07:00', close: '19:00' },
 		],
 		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 60,
 	},
 	{
 		id: 4,
@@ -51,6 +55,8 @@ const eateries = [
 			{ day: 'Sunday', open: '07:00', close: '19:00' },
 		],
 		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 120,
 	},
 	{
 		id: 5,
@@ -66,6 +72,8 @@ const eateries = [
 			{ day: 'Sunday', open: '07:00', close: '19:00' },
 		],
 		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 10,
 	},
 	{
 		id: 6,
@@ -80,6 +88,8 @@ const eateries = [
 			{ day: 'Saturday', open: '07:00', close: '21:00' },
 		],
 		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 40,
 	},
 	{
 		id: 7,
@@ -95,6 +105,8 @@ const eateries = [
 			{ day: 'Sunday', open: '07:00', close: '19:00' },
 		],
 		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 60,
 	},
 ];
 
@@ -147,7 +159,7 @@ interface Eatery {
 	address: Address;
 	openingHours: OpeningHour[];
 	memberRole: 'manager' | 'waiter' | 'chef' | 'removed' | null;
-	createdAt: string;
+	createdAt: number;
 }
 
 export function saveEatery(data: Eatery) {

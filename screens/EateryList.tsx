@@ -163,9 +163,7 @@ const EateriesTab: React.FC = ({ eateries, setEateries }) => {
 							item={item}
 							onPress={() => {
 								selectEatery(item);
-								if (navigation.canGoBack()) {
-									navigation.goBack();
-								}
+								navigation.navigate('Home');
 							}}
 						/>
 					))}

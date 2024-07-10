@@ -8,6 +8,7 @@ export interface Eatery {
 		close: string;
 	}[];
 	memberRole?: 'manager' | 'waiter' | 'chef' | 'removed';
+	memberId: number;
 }
 
 export interface MenuItem {
