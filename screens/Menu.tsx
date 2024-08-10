@@ -19,77 +19,7 @@ import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { getMenuItems, deleteMenuItem } from '../services/menu';
 import { formatMonetaryValue } from '../utils';
 import { useNavigation } from '@react-navigation/native';
-
-interface MenuItem {
-	id: number;
-	name: string;
-	price: number;
-	pictureUri: string | null;
-	ingredients: {
-		id: number;
-		name: string;
-		quantity: number;
-	}[];
-}
-
-interface MenuListItemProps {
-	menuItem: MenuItem;
-	onUpdate: (menuItem: MenuItem) => void;
-	onDelete: () => void;
-}
-
-function MenuListItem(props: MenuListItemProps) {
-	const { colors } = useTheme();
-	const navigation = useNavigation();
-
-	return (
-		<List.Item
-			onPress={() =>
-				navigation.navigate('MenuItem', {
-					menuItem: props.menuItem,
-					onUpdate: props.onUpdate,
-					onDelete: props.onDelete,
-				})
-			}
-			style={{ paddingVertical: 0 }}
-			title={props.menuItem.name}
-			titleStyle={{ fontWeight: 'bold' }}
-			description={formatMonetaryValue(props.menuItem.price)}
-			descriptionStyle={{
-				fontWeight: 'bold',
-				fontSize: 16,
-			}}
-			left={() => (
-				<View
-					style={{
-						width: 96,
-						height: 80,
-						borderRadius: 12,
-						backgroundColor: colors.secondaryContainer,
-						marginLeft: 12,
-						alignItems: 'center',
-						justifyContent: 'center',
-						overflow: 'hidden',
-					}}
-				>
-					{props.menuItem.pictureUri ? (
-						<Image
-							style={{
-								height: '100%',
-								width: '100%',
-							}}
-							source={{
-								uri: props.menuItem.pictureUri,
-							}}
-						/>
-					) : (
-						<List.Icon color={colors.onSecondaryContainer} icon="food" />
-					)}
-				</View>
-			)}
-		/>
-	);
-}
+import MenuListItem from '../components/MenuListItem';
 
 export default function MenuScreen() {
 	const [isLoading, setIsLoading] = useState(true);

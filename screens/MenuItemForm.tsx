@@ -140,7 +140,7 @@ export default function MenuItemFormScreen() {
 				menuItemData.picture = picture;
 			}
 
-			if (oldMenuItem.picture.uri === menuItemData.picture.uri) {
+			if (oldMenuItem?.picture?.uri === menuItemData?.picture?.uri) {
 				delete menuItemData.picture;
 			}
 

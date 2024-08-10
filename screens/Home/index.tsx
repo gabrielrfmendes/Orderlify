@@ -215,7 +215,10 @@ export default function Home() {
 								)}
 							/>
 						)}
-						onPress={() => navigation.navigate('CreateDeliveryOrder')}
+						onPress={() => {
+							bottomSheetModalRef.current.dismiss();
+							navigation.navigate('CreateDeliveryOrder');
+						}}
 					/>
 					<List.Item
 						title="Balcão"

@@ -108,8 +108,7 @@ export default function OrderItemRow(props: OrderItemRowProps) {
 	const navigation = useNavigation();
 	const isPizza = props.halfs;
 	const isChef = selectedEatery.memberRole === 'chef';
-	const status = props.status;
-	const menuItem = props.menuItem;
+	const { status, menuItem } = props;
 	const { onUpdate, ...orderItem } = props;
 
 	function renderLeft() {

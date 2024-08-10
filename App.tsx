@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import Auth from './screens/Auth';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import Toast from 'react-native-toast-message';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import EateryListScreen from './screens/EateryList';
 import { EateryProvider, useEatery } from './contexts/Eatery';
@@ -18,6 +19,8 @@ import MenuScreen from './screens/Menu';
 import MenuItemFormScreen from './screens/MenuItemForm';
 import MenuItemScreen from './screens/MenuItem';
 import HomeScreen from './screens/Home';
+import OrderDeliveryFormScreen from './screens/OrderDeliveryForm';
+import OrderScreen from './screens/Order';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,6 +93,20 @@ function AppNavigator() {
 							}}
 						/>
 						<Stack.Screen
+							name="CreateDeliveryOrder"
+							component={OrderDeliveryFormScreen}
+							options={{
+								title: 'Delivery',
+							}}
+						/>
+						<Stack.Screen
+							name="Order"
+							component={OrderScreen}
+							options={{
+								title: 'Pedido',
+							}}
+						/>
+						<Stack.Screen
 							name="Eateries"
 							component={EateryListScreen}
 							options={{ title: 'Selecionar estabelecimento' }}
@@ -153,6 +170,7 @@ function App() {
 					</AuthProvider>
 				</PaperProvider>
 			</BottomSheetModalProvider>
+			<Toast />
 		</GestureHandlerRootView>
 	);
 }

@@ -24,22 +24,24 @@ export function translateRole(role: Role): string {
 
 export function translateStatus(status) {
 	switch (status) {
+		case 'empty':
+			return 'Pedido vazio';
 		case 'waiting':
-			return 'Em espera';
+			return 'Aguardando preparo';
 		case 'preparing':
 			return 'Em preparo';
 		case 'ready':
-			return 'Pronto';
+			return 'Pronto para entrega';
 		case 'delivered':
-			return 'Pagamento pendente';
+			return 'Pedido entregue';
 		case 'canceled':
-			return 'Cancelado';
+			return 'Pedido cancelado';
 		case 'removed':
-			return 'Removido';
+			return 'Item removido';
 		case 'paid':
-			return 'Finalizado';
+			return 'Pedido finalizado';
 		default:
-			return 'Em espera';
+			return 'Aguardando preparo';
 	}
 }
 
@@ -182,4 +184,15 @@ export function formatPhoneNumberInput(input: string) {
 	} else {
 		return `${digits.slice(0, 2)} ${digits.slice(2, 7)}-${digits.slice(7)}`;
 	}
+}
+
+export function getOrderDetailsTotalQuantity(
+	orderDetails: OrderItem['details']
+) {
+	let totalQuantity = 0;
+	for (const detail of orderDetails) {
+		totalQuantity += detail.quantity;
+	}
+
+	return totalQuantity;
 }

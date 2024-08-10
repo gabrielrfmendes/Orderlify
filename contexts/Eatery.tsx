@@ -28,6 +28,7 @@ export const EateryProvider: React.FC<EateryProviderProps> = ({ children }) => {
 				selectedEatery,
 				selectEatery,
 				newOrder,
+				setNewOrder,
 			}}
 		>
 			{children}

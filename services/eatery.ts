@@ -10,6 +10,21 @@ const errorMock = {
 
 const eateries = [
 	{
+		id: 1,
+		name: 'Loja 1',
+		logoUri: undefined,
+		operatingHours: [
+			{ day: 'Monday', open: '07:00', close: '21:00' },
+			{ day: 'Wednesday', open: '07:00', close: '21:00' },
+			{ day: 'Thursday', open: '07:00', close: '21:00' },
+			{ day: 'Friday', open: '07:00', close: '22:00' },
+			{ day: 'Saturday', open: '08:00', close: '22:00' },
+		],
+		memberRole: 'manager',
+		memberId: 69,
+		orderTimer: 50,
+	},
+	{
 		id: 2,
 		name: 'Loja 2',
 		logoUri: undefined,
@@ -20,7 +35,7 @@ const eateries = [
 			{ day: 'Friday', open: '07:00', close: '22:00' },
 			{ day: 'Saturday', open: '08:00', close: '22:00' },
 		],
-		memberRole: 'manager',
+		memberRole: 'waiter',
 		memberId: 69,
 		orderTimer: 50,
 	},
@@ -37,7 +52,7 @@ const eateries = [
 			{ day: 'Saturday', open: '07:00', close: '21:00' },
 			{ day: 'Sunday', open: '07:00', close: '19:00' },
 		],
-		memberRole: 'manager',
+		memberRole: 'chef',
 		memberId: 69,
 		orderTimer: 60,
 	},
