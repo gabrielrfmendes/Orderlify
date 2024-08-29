@@ -20,63 +20,101 @@ declare global {
 		phoneNumber: string;
 		address: Address;
 		openingHours: OpeningHour[];
-		memberRole: 'manager' | 'waiter' | 'chef' | 'removed' | null;
+		memberRole?: 'manager' | 'waiter' | 'chef' | 'removed';
 		createdAt: number;
 	}
 
-	interface MenuItem {
+	interface Option {
 		id: number;
 		name: string;
-		price?: number;
-		pictureUri?: string;
-		availability: 'preparationRequired' | 'readyToDelivery';
+		price: number;
 	}
 
 	interface Extra {
 		id: number;
 		name: string;
 		price: number;
-		quantity: number;
 	}
 
-	interface PizzaFlavor {
+	interface MenuItemOption {
+		id: number;
+		optionId: number;
+	}
+
+	interface MenuItemExtra {
+		id: number;
+		extra: Extra;
+		orderQuantityLimit?: number;
+	}
+
+	interface MenuItem {
 		id: number;
 		name: string;
 		price: number;
 		pictureUri?: string;
+		availability: 'preparationRequired' | 'readyToDelivery';
+		isHalfAndHalf?: boolean;
+		options?: MenuItemOption[];
+		extras?: MenuItemExtra[];
 	}
 
-	interface StuffedCrust {
+	interface OrderItemOption {
 		id: number;
-		name: string;
-		price: number;
+		menuItemOption: MenuItemOption;
 	}
 
-	interface PizzaHalf {
+	interface OrderItemExtra {
 		id: number;
-		flavor: PizzaFlavor;
-		stuffedCrust: StuffedCrust;
+		extra: Extra;
+		quantity: number;
+	}
+
+	interface OrderItemHalf {
+		id: number;
+		menuItem: MenuItem;
+		options?: OrderItemOption[];
+		extras?: OrderItemExtra[];
 	}
 
 	interface OrderItem {
 		id: number;
-		menuItem: MenuItem;
-		extras?: Extra[];
-		halfs?: PizzaHalf[];
+		menuItem?: MenuItem;
+		options?: OrderItemOption[];
+		extras?: OrderItemExtra[];
+		halves?: OrderItemHalf[];
 		quantity: number;
-		deliveredQuantity: number;
 		observation?: string;
 		status:
 			| 'waiting'
 			| 'preparing'
 			| 'ready'
+			| 'on_the_way'
 			| 'delivered'
 			| 'finished'
-			| 'removed';
+			| 'canceled';
+		deliveredQuantity: number;
 	}
 
 	interface Order {
-		items: Item[];
+		id: number;
+		items: OrderItem[];
+	}
+
+	interface OrderItemBody {
+		menuItemId?: number;
+		extras?: {
+			extraId: number;
+			quantity: number;
+		}[];
+		hals?: {
+			menuItemId: number;
+			extras?: {
+				extraId: number;
+				quantity: number;
+			}[];
+		}[];
+		quantity: number;
+		observation?: string;
 	}
 }
 

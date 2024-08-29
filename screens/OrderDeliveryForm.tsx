@@ -77,7 +77,7 @@ export default function OrderDeliveryFormScreen() {
 		});
 
 		navigation.goBack();
-		navigation.navigate('Menu');
+		navigation.navigate('OrderForm');
 	}
 
 	return (

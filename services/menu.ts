@@ -6,40 +6,193 @@ const errorMock = {
 	},
 };
 
-const menuItems = [
+const extras: Extra[] = [
+	{ id: 1, name: 'Bacon', price: 4 },
+	{ id: 2, name: 'Cheddar', price: 3 },
+	{ id: 3, name: 'Tomate', price: 2 },
+];
+
+const flavors: Flavor[] = [
 	{
 		id: 1,
-		name: 'AC/DCheese',
-		description:
-			"It's a long way to the top if you wanna rock 'n' roll, mas com nosso hambúrguer suculento, cheddar derretido, bacon crocante e cebolas caramelizadas, você chega lá em uma mordida! Rock 'n' roll never tasted so good!",
-		price: 27.98,
-		pictureUri: null,
-		availability: 'PreparationRequired',
-	},
-	{
-		id: 3,
-		name: 'Kurt Cobaicon',
-		price: 27.98,
-		description:
-			'Come as you are e experimente nosso hambúrguer com bacon crocante, queijo cheddar derretido, cebolas roxas e maionese defumada. Um sabor que vai fazer você Smell Like Teen Spirit!',
-		pictureUri:
-			'https://s3.us-west-2.amazonaws.com/whatsmenu/production/mostardapubburguer/products/459123/mostardapubburguer7m8dkncchl1t9g0webp',
-		availability: 'PreparationRequired',
+		name: 'Peperone',
+		price: 32.98,
+		pictureUri: 'https://example.com/peperone_grande.jpg',
 	},
 	{
 		id: 2,
-		name: 'Coca-Cola 2 Litros',
-		price: 1.99,
-		availability: 'ReadyToDelivery',
+		name: 'Frango com Catupiry',
+		price: 34.98,
+		pictureUri: 'https://example.com/frango_catupiry_grande.jpg',
+	},
+	{
+		id: 3,
+		name: 'Marguerita',
+		price: 30.98,
+		pictureUri: 'https://example.com/marguerita_grande.jpg',
+	},
+
+	/*{
+		id: 4,
+		name: 'Peperone',
+		price: 27.98,
+		pictureUri: 'https://example.com/peperone_media.jpg',
+	},
+	{
+		id: 5,
+		name: 'Frango com Catupiry',
+		price: 29.98,
+		pictureUri: 'https://example.com/frango_catupiry_media.jpg',
+	},
+	{
+		id: 6,
+		name: 'Marguerita',
+		price: 25.98,
+		pictureUri: 'https://example.com/marguerita_media.jpg',
+	},
+
+	{
+		id: 7,
+		name: 'Peperone',
+		price: 22.98,
+		pictureUri: 'https://example.com/peperone_pequena.jpg',
+	},
+	{
+		id: 8,
+		name: 'Frango com Catupiry',
+		price: 24.98,
+		pictureUri: 'https://example.com/frango_catupiry_pequena.jpg',
+	},
+	{
+		id: 9,
+		name: 'Marguerita',
+		price: 20.98,
+		pictureUri: 'https://example.com/marguerita_pequena.jpg',
+	},*/
+];
+
+const stuffedCrusts: StuffedCrust[] = [
+	{ id: 1, name: 'Catupiry', price: 7 },
+	{ id: 2, name: 'Cheddar', price: 7 },
+	{ id: 3, name: 'Cream Cheese', price: 8 },
+
+	/*{ id: 4, name: 'Catupiry', price: 6 },
+	{ id: 5, name: 'Cheddar', price: 6 },
+	{ id: 6, name: 'Cream Cheese', price: 7 },
+
+	{ id: 7, name: 'Catupiry', price: 5 },
+	{ id: 8, name: 'Cheddar', price: 5 },
+	{ id: 9, name: 'Cream Cheese', price: 6 },*/
+];
+
+const menuItems: MenuItem[] = [
+	{
+		id: 1,
+		name: 'Pizza Grande',
+		flavorIds: [1, 2, 3],
+		stuffedCrustIds: [1, 2, 3],
+		extraIds: [],
+		status: 'available',
+		availability: 'preparationRequired',
+	},
+	/*{
+		id: 2,
+		name: 'Pizza Média',
+		flavorIds: [4, 5, 6],
+		stuffedCrustIds: [4, 5, 6],
+		extraIds: [],
+		status: 'available',
+		availability: 'preparationRequired',
+	},
+	{
+		id: 3,
+		name: 'Pizza Pequena',
+		flavorIds: [7, 8, 9],
+		stuffedCrustIds: [7, 8, 9],
+		extraIds: [],
+		status: 'available',
+		availability: 'preparationRequired',
+	},*/
+	{
+		id: 4,
+		name: 'AC/DCheese',
+		price: 27.98,
+		pictureUri: 'https://example.com/acdcheese.jpg',
+		flavorIds: [],
+		stuffedCrustIds: [],
+		extraIds: [1, 2, 3],
+		status: 'available',
+		availability: 'preparationRequired',
+	},
+	{
+		id: 5,
+		name: 'Rock Burger',
+		price: 29.98,
+		pictureUri: 'https://example.com/rockburger.jpg',
+		flavorIds: [],
+		stuffedCrustIds: [],
+		extraIds: [1, 2, 3],
+		status: 'available',
+		availability: 'preparationRequired',
+	},
+	{
+		id: 6,
+		name: 'Blues Bacon',
+		price: 31.98,
+		pictureUri: 'https://example.com/bluesbacon.jpg',
+		flavorIds: [],
+		stuffedCrustIds: [],
+		extraIds: [1, 2, 3],
+		status: 'available',
+		availability: 'preparationRequired',
+	},
+
+	{
+		id: 7,
+		name: 'Coca-Cola Lata',
+		price: 4.99,
+		pictureUri: 'https://example.com/cocacola.jpg',
+		flavorIds: [],
+		stuffedCrustIds: [],
+		extraIds: [],
+		status: 'available',
+		availability: 'readyToDelivery',
+	},
+	{
+		id: 8,
+		name: 'Guaraná Lata',
+		price: 4.5,
+		pictureUri: 'https://example.com/guarana.jpg',
+		flavorIds: [],
+		stuffedCrustIds: [],
+		extraIds: [],
+		status: 'available',
+		availability: 'readyToDelivery',
+	},
+	{
+		id: 9,
+		name: 'Água Mineral',
+		price: 2.5,
+		pictureUri: 'https://example.com/agua.jpg',
+		flavorIds: [],
+		stuffedCrustIds: [],
+		extraIds: [],
+		status: 'available',
+		availability: 'readyToDelivery',
 	},
 ];
 
 export function getMenuItems() {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			resolve({ data: { menuItems } });
-
-			// reject(errorMock);
+			resolve({
+				data: {
+					menuItems,
+					flavors,
+					stuffedCrusts,
+					extras,
+				},
+			});
 		}, 2000);
 	});
 }

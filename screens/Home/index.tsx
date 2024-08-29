@@ -13,13 +13,10 @@ import { useTheme } from 'react-native-paper';
 import OrdersTab from './OrdersTab';
 import { useEatery } from '../../contexts/Eatery';
 import { getActiveOrders } from '../../services/order';
-import {
-	BottomSheetModal,
-	BottomSheetView,
-	BottomSheetBackdrop,
-} from '@gorhom/bottom-sheet';
+import BottomSheet from '../../components/BottomSheet';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import TableSelectorModal from './TableSelectorModal';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -27,45 +24,11 @@ export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);
 	const [orders, setOrders] = useState([]);
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+	const [isTableSelectorModalVisible, setIsTableSelectorModalVisible] =
+		useState(false);
 	const { colors } = useTheme();
-	const { selectedEatery, newOrder } = useEatery();
-	const snapPoints = useMemo(() => [280], []);
-	const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+	const { selectedEatery, newOrder, setNewOrder } = useEatery();
 	const navigation = useNavigation();
-	const handlePresentModalPress = useCallback(() => {
-		bottomSheetModalRef.current?.present();
-		setIsBottomSheetVisible(true);
-	}, []);
-	const handleDismissModalPress = useCallback(() => {
-		bottomSheetModalRef.current.dismiss();
-		setIsBottomSheetVisible(false);
-	}, []);
-	const renderBackdrop = useCallback(
-		(props) => (
-			<BottomSheetBackdrop
-				{...props}
-				disappearsOnIndex={-1}
-				appearsOnIndex={0}
-			/>
-		),
-		[]
-	);
-
-	useEffect(() => {
-		const onBackPress = () => {
-			handleDismissModalPress();
-			if (isBottomSheetVisible) {
-				return true;
-			}
-			return false;
-		};
-
-		BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-		return () => {
-			BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-		};
-	}, [isBottomSheetVisible]);
 
 	useEffect(() => {
 		async function listActiveOrders() {
@@ -145,7 +108,7 @@ export default function Home() {
 							right: 16,
 						}}
 						icon="text-box-plus-outline"
-						onPress={handlePresentModalPress}
+						onPress={() => setIsBottomSheetVisible(true)}
 					/>
 				) : (
 					<FAB
@@ -157,25 +120,28 @@ export default function Home() {
 							bottom: 16,
 							right: 16,
 						}}
-						onPress={() => navigation.navigate('Order')}
+						onPress={() => navigation.navigate('OrderForm')}
 					/>
 				)
 			) : (
 				<></>
 			)}
-			<BottomSheetModal
-				ref={bottomSheetModalRef}
-				snapPoints={snapPoints}
-				enablePanDownToClose
-				backdropComponent={renderBackdrop}
-				backgroundStyle={{
-					backgroundColor: colors.surface,
+			<TableSelectorModal
+				visible={isTableSelectorModalVisible}
+				onRequestClose={() => setIsTableSelectorModalVisible(false)}
+				orders={orders}
+				onSelectTable={(tableNumber) => {
+					setNewOrder({
+						tableNumber,
+					});
+					navigation.navigate('OrderForm');
 				}}
-				handleIndicatorStyle={{
-					backgroundColor: colors.onSurfaceVariant,
-				}}
+			/>
+			<BottomSheet
+				visible={isBottomSheetVisible}
+				onRequestClose={() => setIsBottomSheetVisible(false)}
 			>
-				<BottomSheetView style={{ flex: 1 }}>
+				<View style={{ flex: 1 }}>
 					<Text
 						variant="titleMedium"
 						style={{
@@ -187,6 +153,39 @@ export default function Home() {
 					>
 						Tipo do pedido
 					</Text>
+					<List.Item
+						title="Mesa"
+						titleStyle={{
+							color: colors.onSurface,
+						}}
+						left={(props) => (
+							<List.Icon
+								{...props}
+								icon={(props) => (
+									<View
+										style={{
+											backgroundColor: 'crimson',
+											height: 40,
+											width: 40,
+											borderRadius: 20,
+											alignItems: 'center',
+											justifyContent: 'center',
+										}}
+									>
+										<MaterialIcons
+											name="table-bar"
+											{...props}
+											color={colors.surfaceVariant}
+										/>
+									</View>
+								)}
+							/>
+						)}
+						onPress={() => {
+							setIsBottomSheetVisible(false);
+							setIsTableSelectorModalVisible(true);
+						}}
+					/>
 					<List.Item
 						title="Delivery"
 						titleStyle={{
@@ -217,7 +216,7 @@ export default function Home() {
 						)}
 						onPress={() => {
 							bottomSheetModalRef.current.dismiss();
-							navigation.navigate('CreateDeliveryOrder');
+							navigation.navigate('OrderForm');
 						}}
 					/>
 					<List.Item
@@ -248,40 +247,10 @@ export default function Home() {
 								)}
 							/>
 						)}
-						onPress={() => navigation.navigate('CreateBarOrder')}
+						onPress={() => navigation.navigate('OrderForm')}
 					/>
-					<List.Item
-						title="Mesa"
-						titleStyle={{
-							color: colors.onSurface,
-						}}
-						left={(props) => (
-							<List.Icon
-								{...props}
-								icon={(props) => (
-									<View
-										style={{
-											backgroundColor: 'crimson',
-											height: 40,
-											width: 40,
-											borderRadius: 20,
-											alignItems: 'center',
-											justifyContent: 'center',
-										}}
-									>
-										<MaterialIcons
-											name="table-bar"
-											{...props}
-											color={colors.surfaceVariant}
-										/>
-									</View>
-								)}
-							/>
-						)}
-						onPress={() => navigation.navigate('CreateTableOrder')}
-					/>
-				</BottomSheetView>
-			</BottomSheetModal>
+				</View>
+			</BottomSheet>
 		</AppBackground>
 	);
 }

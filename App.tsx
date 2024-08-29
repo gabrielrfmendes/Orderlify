@@ -21,6 +21,7 @@ import MenuItemScreen from './screens/MenuItem';
 import HomeScreen from './screens/Home';
 import OrderDeliveryFormScreen from './screens/OrderDeliveryForm';
 import OrderScreen from './screens/Order';
+import OrderFormScreen from './screens/OrderForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -98,6 +99,11 @@ function AppNavigator() {
 							options={{
 								title: 'Delivery',
 							}}
+						/>
+						<Stack.Screen
+							name="OrderForm"
+							component={OrderFormScreen}
+							options={{ title: 'Novo pedido' }}
 						/>
 						<Stack.Screen
 							name="Order"

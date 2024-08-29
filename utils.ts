@@ -196,3 +196,96 @@ export function getOrderDetailsTotalQuantity(
 
 	return totalQuantity;
 }
+
+export function formatPizzaOrderItem(
+	pizzaOrderItem: OrderItem,
+	isChef: boolean
+) {
+	const { halfs, observation } = pizzaOrderItem;
+
+	let result = '';
+
+	if (halfs) {
+		halfs.forEach((half) => {
+			result += `  ● 1/2 ${half.flavor.name}`;
+			if (!isChef) {
+				const halfPrice = (half.flavor.price / 2).toFixed(2);
+				result += ` • ${formatMonetaryValue(halfPrice)}`;
+			}
+			result += '\n';
+			if (half.stuffedCrust) {
+				result += `  ● Borda recheada: ${half.stuffedCrust.name}`;
+				if (!isChef) {
+					const stuffedCrustPrice = (half.stuffedCrust.price / 2).toFixed(2);
+					result += ` • ${formatMonetaryValue(stuffedCrustPrice)}`;
+				}
+				result += '\n';
+			}
+		});
+
+		if (halfs.length === 1) {
+			result = `  ● ${halfs[0].flavor.name}`;
+			if (!isChef) {
+				result += ` • ${formatMonetaryValue(halfs[0].flavor.price)}`;
+			}
+			result += '\n';
+			if (halfs[0].stuffedCrust) {
+				result += `  ● Borda recheada: ${halfs[0].stuffedCrust.name}`;
+				if (!isChef) {
+					result += ` • ${formatMonetaryValue(halfs[0].stuffedCrust.price)}`;
+				}
+				result += '\n';
+			}
+		}
+
+		if (
+			halfs.length === 2 &&
+			halfs[0].stuffedCrust &&
+			halfs[1].stuffedCrust &&
+			halfs[0].stuffedCrust.name === halfs[1].stuffedCrust.name
+		) {
+			result = `  ● 1/2 ${halfs[0].flavor.name}`;
+			if (!isChef) {
+				result += ` • ${formatMonetaryValue(halfs[0].flavor.price / 2)}`;
+			}
+			result += '\n';
+			result += `  ● 1/2 ${halfs[1].flavor.name}`;
+			if (!isChef) {
+				result += ` • ${formatMonetaryValue(halfs[1].flavor.price / 2)}`;
+			}
+			result += '\n';
+			result += `  ● Borda recheada: ${halfs[0].stuffedCrust.name}`;
+			if (!isChef) {
+				result += ` • ${formatMonetaryValue(halfs[0].stuffedCrust.price)}`;
+			}
+			result += '\n';
+		}
+	}
+
+	result += `${observation ? `Observação: "${observation}"` : 'Sem observação'}`;
+
+	return result;
+}
+
+export function formatOrderItem(orderItem: OrderItem, isChef: boolean) {
+	let extrasList = '';
+
+	if (orderItem.extras && orderItem.extras.length > 0) {
+		extrasList = orderItem.extras
+			.map((extra) => {
+				const extraDetail = `  ● ${extra.quantity}x ${extra.name.toLowerCase()}`;
+				return isChef
+					? extraDetail
+					: `${extraDetail} • ${formatMonetaryValue(extra.price)}`;
+			})
+			.join('\n');
+	} else {
+		extrasList = 'Sem adicionais';
+	}
+
+	const observation = orderItem.observation
+		? `"${orderItem.observation}"`
+		: 'Sem observação';
+
+	return `${orderItem.extras && orderItem.extras.length > 0 ? `Adicionais:\n` : ''}${extrasList}\n${orderItem.observation ? `Observação: ` : ''}${observation}`;
+}
