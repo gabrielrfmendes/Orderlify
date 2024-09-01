@@ -120,9 +120,10 @@ export default function OrderScreen() {
 					<Button
 						labelStyle={{ fontWeight: 'bold' }}
 						onPress={() => {
-							navigation.navigate('OrderDatails', {
-								order: route.params?.order ? route.params.order : newOrder,
+							navigation.navigate('OrderDetails', {
+							  order: route.params?.order ? route.params.order : newOrder,
 							});
+
 						}}
 					>
 						Detalhes

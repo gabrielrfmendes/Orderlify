@@ -1,7 +1,7 @@
 import React from 'react';
 import AppBackground from '../../components/AppBackground';
 import { useTheme, ActivityIndicator, Text, Divider } from 'react-native-paper';
-import OrderListItem from './OrderListItem';
+import OrderListItem from '../../components/OrderListItem';
 import { useWindowDimensions, View, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from '@expo/vector-icons/MaterialCommunityIcons';

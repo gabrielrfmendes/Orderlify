@@ -22,6 +22,7 @@ import HomeScreen from './screens/Home';
 import OrderDeliveryFormScreen from './screens/OrderDeliveryForm';
 import OrderScreen from './screens/Order';
 import OrderFormScreen from './screens/OrderForm';
+import OrderDetailsScreen from './screens/OrderDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -111,6 +112,13 @@ function AppNavigator() {
 							options={{
 								title: 'Pedido',
 							}}
+						/>
+						<Stack.Screen
+						  name="OrderDetails"
+						  component={OrderDetailsScreen}
+						  options={{
+						    title: 'Detalhes do pedido'
+						  }}
 						/>
 						<Stack.Screen
 							name="Eateries"

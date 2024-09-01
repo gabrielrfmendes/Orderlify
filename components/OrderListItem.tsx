@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { List, Text } from 'react-native-paper';
 import { View } from 'react-native';
-import PreparationTimer from '../../components/PreparationTimer';
-import { translateStatus, getElapsedTime } from '../../utils';
-import { useEatery } from '../../contexts/Eatery';
+import PreparationTimer from './PreparationTimer';
+import { translateStatus, getElapsedTime } from '../utils';
+import { useEatery } from '../contexts/Eatery';
 
 interface Props {
 	item: object;
