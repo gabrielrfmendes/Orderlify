@@ -32,7 +32,7 @@ const flavors: Flavor[] = [
 		pictureUri: 'https://example.com/marguerita_grande.jpg',
 	},
 
-	/*{
+	{
 		id: 4,
 		name: 'Peperone',
 		price: 27.98,
@@ -68,7 +68,7 @@ const flavors: Flavor[] = [
 		name: 'Marguerita',
 		price: 20.98,
 		pictureUri: 'https://example.com/marguerita_pequena.jpg',
-	},*/
+	},
 ];
 
 const stuffedCrusts: StuffedCrust[] = [
@@ -76,13 +76,13 @@ const stuffedCrusts: StuffedCrust[] = [
 	{ id: 2, name: 'Cheddar', price: 7 },
 	{ id: 3, name: 'Cream Cheese', price: 8 },
 
-	/*{ id: 4, name: 'Catupiry', price: 6 },
+	{ id: 4, name: 'Catupiry', price: 6 },
 	{ id: 5, name: 'Cheddar', price: 6 },
 	{ id: 6, name: 'Cream Cheese', price: 7 },
 
 	{ id: 7, name: 'Catupiry', price: 5 },
 	{ id: 8, name: 'Cheddar', price: 5 },
-	{ id: 9, name: 'Cream Cheese', price: 6 },*/
+	{ id: 9, name: 'Cream Cheese', price: 6 },
 ];
 
 const menuItems: MenuItem[] = [
@@ -95,7 +95,7 @@ const menuItems: MenuItem[] = [
 		status: 'available',
 		availability: 'preparationRequired',
 	},
-	/*{
+	{
 		id: 2,
 		name: 'Pizza Média',
 		flavorIds: [4, 5, 6],
@@ -112,7 +112,8 @@ const menuItems: MenuItem[] = [
 		extraIds: [],
 		status: 'available',
 		availability: 'preparationRequired',
-	},*/
+	},
+	
 	{
 		id: 4,
 		name: 'AC/DCheese',
@@ -121,7 +122,7 @@ const menuItems: MenuItem[] = [
 		flavorIds: [],
 		stuffedCrustIds: [],
 		extraIds: [1, 2, 3],
-		status: 'available',
+		isAvailable: true,
 		availability: 'preparationRequired',
 	},
 	{
@@ -132,7 +133,7 @@ const menuItems: MenuItem[] = [
 		flavorIds: [],
 		stuffedCrustIds: [],
 		extraIds: [1, 2, 3],
-		status: 'available',
+		isAvailable: true,
 		availability: 'preparationRequired',
 	},
 	{
@@ -143,7 +144,7 @@ const menuItems: MenuItem[] = [
 		flavorIds: [],
 		stuffedCrustIds: [],
 		extraIds: [1, 2, 3],
-		status: 'available',
+		isAvailable: true,
 		availability: 'preparationRequired',
 	},
 
@@ -155,7 +156,7 @@ const menuItems: MenuItem[] = [
 		flavorIds: [],
 		stuffedCrustIds: [],
 		extraIds: [],
-		status: 'available',
+		isAvailable: true,
 		availability: 'readyToDelivery',
 	},
 	{
@@ -166,7 +167,7 @@ const menuItems: MenuItem[] = [
 		flavorIds: [],
 		stuffedCrustIds: [],
 		extraIds: [],
-		status: 'available',
+		isAvailable: true,
 		availability: 'readyToDelivery',
 	},
 	{
@@ -177,7 +178,7 @@ const menuItems: MenuItem[] = [
 		flavorIds: [],
 		stuffedCrustIds: [],
 		extraIds: [],
-		status: 'available',
+		isAvailable: true,
 		availability: 'readyToDelivery',
 	},
 ];

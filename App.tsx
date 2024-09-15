@@ -23,6 +23,7 @@ import OrderDeliveryFormScreen from './screens/OrderDeliveryForm';
 import OrderScreen from './screens/Order';
 import OrderFormScreen from './screens/OrderForm';
 import OrderDetailsScreen from './screens/OrderDetails';
+import EaterySettingsScreen from './screens/EaterySettings';
 
 const Stack = createNativeStackNavigator();
 
@@ -93,6 +94,11 @@ function AppNavigator() {
 							options={{
 								header: () => <HomeHeader />,
 							}}
+						/>
+						<Stack.Screen
+						  name="EaterySettings"
+						  component={EaterySettingsScreen}
+						  options={{ title: 'Configurações' }}
 						/>
 						<Stack.Screen
 							name="CreateDeliveryOrder"

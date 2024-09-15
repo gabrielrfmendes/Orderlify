@@ -53,6 +53,7 @@ declare global {
 		price: number;
 		pictureUri?: string;
 		availability: 'preparationRequired' | 'readyToDelivery';
+		isAvailable: boolean;
 		isHalfAndHalf?: boolean;
 		options?: MenuItemOption[];
 		extras?: MenuItemExtra[];

@@ -29,7 +29,7 @@ function extractObjectUpdates(oldObject, newObject) {
 
 export default function MenuItemFormScreen() {
 	const [picture, setPicture] = useState({ uri: null });
-	const [availability, setAvailability] = useState('ReadyToDelivery');
+	const [availability, setAvailability] = useState('readyToDelivery');
 	const [name, setName] = useState('');
 	const [nameValidationMessage, setNameValidationMessage] = useState('');
 	const [description, setDescription] = useState('');
@@ -55,7 +55,7 @@ export default function MenuItemFormScreen() {
 				setPicture({ uri: menuItem?.pictureUri });
 			}
 			setName(menuItem.name);
-			setDescription(menuItem.description);
+			setDescription(menuItem.description || '');
 			setPrice(formatMonetaryValue(menuItem.price));
 			setCategory(menuItem.category || '');
 		} else {
@@ -239,11 +239,11 @@ export default function MenuItemFormScreen() {
 								>
 									<RadioButton.Item
 										label="Pronta entrega"
-										value="ReadyToDelivery"
+										value="readyToDelivery"
 									/>
 									<RadioButton.Item
 										label="Após preparo"
-										value="PreparationRequired"
+										value="preparationRequired"
 									/>
 								</RadioButton.Group>
 							</View>
@@ -282,7 +282,7 @@ export default function MenuItemFormScreen() {
 						validationMessage={priceValidationMessage}
 						error={!!priceValidationMessage}
 					/>
-					<TouchableOpacity
+					{/*<TouchableOpacity
 						onPress={() => {
 							navigation.navigate('Categories', {
 								onSelect: setCategory,
@@ -290,7 +290,7 @@ export default function MenuItemFormScreen() {
 						}}
 					>
 						<TextField value={category} label="Categoria" editable={false} />
-					</TouchableOpacity>
+					</TouchableOpacity>*/}
 				</View>
 			</ScrollView>
 			<View

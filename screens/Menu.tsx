@@ -95,7 +95,11 @@ export default function MenuScreen() {
 					</View>
 				) : (
 					<>
-						{menuItems.map((menuItem) => (
+						{menuItems.map((menuItem) => {
+						if (!menuItem.price) {
+						  return;
+						}
+						return (
 							<MenuListItem
 								key={menuItem.id}
 								menuItem={menuItem}
@@ -126,7 +130,7 @@ export default function MenuScreen() {
 									);
 								}}
 							/>
-						))}
+						)})}
 						<Divider
 							style={{
 								marginHorizontal: 16,

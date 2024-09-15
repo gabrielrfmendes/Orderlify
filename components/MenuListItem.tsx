@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Image } from 'react-native';
 import { useTheme, List, Badge } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { MenuItem, OrderItem } from '../interfaces';
 import { formatMonetaryValue } from '../utils';
 
 function getTotalQuantity(orderDetails: OrderItem['details']) {
@@ -31,16 +30,12 @@ export default function MenuListItem(props: MenuListItemProps) {
 			onPress={() => navigation.navigate('MenuItem', { ...props })}
 			style={{ paddingVertical: 0 }}
 			title={props.menuItem.name}
-			titleStyle={{ fontWeight: 'bold' }}
 			description={formatMonetaryValue(props.menuItem.price)}
-			descriptionStyle={{
-				fontWeight: 'bold',
-				fontSize: 16,
-			}}
+			descriptionStyle={{ fontSize: 16 }}
 			left={() => (
 				<View
 					style={{
-						width: 96,
+						width: 100,
 						height: 80,
 						borderRadius: 12,
 						backgroundColor: colors.secondaryContainer,

@@ -65,7 +65,7 @@ export default function MenuItemScreen() {
 					}}
 				>
 					<Text
-						variant="headlineSmall"
+						variant="titleLarge"
 						style={{ color: 'white' }}
 						numberOfLines={2}
 					>
@@ -76,17 +76,11 @@ export default function MenuItemScreen() {
 			<View
 				style={{
 					flex: 1,
-					padding: 16,
+					padding: 8,
 					gap: 8,
 				}}
 			>
-				<Text
-					variant="headlineSmall"
-					style={{
-						fontSize: 20,
-						fontWeight: 'bold',
-					}}
-				>
+				<Text variant="titleLarge">
 					{formatMonetaryValue(route.params.menuItem.price)}
 				</Text>
 				<Text variant="bodyLarge" style={{ textAlign: 'justify' }}>
@@ -102,7 +96,7 @@ export default function MenuItemScreen() {
 					<IconButton
 						mode="contained-tonal"
 						icon="pencil"
-						size={32}
+						size={24}
 						onPress={() => {
 							navigation.navigate('MenuItemForm', {
 								menuItem: route.params.menuItem,
@@ -126,7 +120,7 @@ export default function MenuItemScreen() {
 						icon="trash-can-outline"
 						containerColor={colors.errorContainer}
 						iconColor={colors.onErrorContainer}
-						size={32}
+						size={24}
 						onPress={() => {
 							Alert.alert(
 								'Excluir produto',
@@ -150,14 +144,16 @@ export default function MenuItemScreen() {
 					/>
 				</View>
 			</View>
-			<View
+			{/*<View
 				style={{
 					paddingVertical: 16,
 					paddingHorizontal: 32,
 				}}
 			>
-				<Button mode="contained">Adicionar ao pedido</Button>
-			</View>
+				<Button mode="contained">
+				  Adicionar ao pedido
+				</Button>
+			</View>*/}
 		</AppBackground>
 	);
 }
