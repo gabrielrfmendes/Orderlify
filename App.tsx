@@ -12,6 +12,7 @@ import EateryListScreen from './screens/EateryList';
 import { EateryProvider, useEatery } from './contexts/Eatery';
 import CustomNavigationBar from './components/CustomNavigationBar';
 import ModalBar from './components/ModalBar';
+import MaterialIcon from '@expo/vector-icons/MaterialIcons';
 import EateryFormScreen from './screens/EateryForm';
 import AddressFormScreen from './screens/AddressForm';
 import OpeningHoursScreen from './screens/OpeningHours';
@@ -38,8 +39,11 @@ function HomeHeader() {
 				onPress={() => navigation.navigate('Eateries')}
 			/>
 			<Appbar.Action
-				icon="store-cog-outline"
-				onPress={() => navigation.navigate('EaterySettings')}
+				icon={props => <MaterialIcon
+				  name="restaurant-menu"
+				  {...props}
+				/>}
+				onPress={() => navigation.navigate('Menu')}
 			/>
 		</Appbar.Header>
 	);
