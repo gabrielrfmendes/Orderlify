@@ -22,12 +22,17 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function Home() {
 	const [isLoading, setIsLoading] = useState(true);
-	const [orders, setOrders] = useState([]);
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 	const [isTableSelectorModalVisible, setIsTableSelectorModalVisible] =
 		useState(false);
 	const { colors } = useTheme();
-	const { selectedEatery, newOrder, setNewOrder } = useEatery();
+	const {
+	  selectedEatery,
+	  newOrder,
+	  setNewOrder,
+	  orders,
+	  setOrders,
+	} = useEatery();
 	const navigation = useNavigation();
 
 	useEffect(() => {

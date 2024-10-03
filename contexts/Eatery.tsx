@@ -21,6 +21,7 @@ export const EateryProvider: React.FC<EateryProviderProps> = ({ children }) => {
 	const [flavors, setFlavors] = useState([]);
 	const [stuffedCrusts, setStuffedCrusts] = useState([]);
 	const [newOrder, setNewOrder] = useState<object | null>(null);
+	const [orders, setOrders] = useState([]);
 
 	const selectEatery = (eatery: Eatery | null) => {
 		setNewOrder(null);
@@ -53,6 +54,8 @@ export const EateryProvider: React.FC<EateryProviderProps> = ({ children }) => {
 				stuffedCrusts,
 				newOrder,
 				setNewOrder,
+				orders,
+				setOrders,
 			}}
 		>
 			{children}

@@ -83,7 +83,12 @@ function calculateTotal(orderItems: OrderItem[]) {
 }
 
 export default function OrderScreen() {
-	const { selectedEatery, newOrder } = useEatery();
+	const {
+	  selectedEatery,
+	  newOrder,
+	  orders,
+	  setOrders,
+	} = useEatery();
 	const [isLoading] = useState();
 	const [order, setOrder] = useState(null);
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
@@ -97,7 +102,7 @@ export default function OrderScreen() {
 	}, []);
 
 	useEffect(() => {
-		if (order) {
+		if (order?.id) {
 			const updatedStatus = determineOrderStatus(order?.items);
 
 			if (order?.status !== updatedStatus) {
@@ -106,6 +111,14 @@ export default function OrderScreen() {
 					status: updatedStatus,
 				}));
 			}
+
+			setOrders(orders.map(currentOrder => {
+        if (order.id === currentOrder.id) {
+          return order;
+        }
+
+        return currentOrder;
+      }));
 		}
 	}, [order]);
 
@@ -166,6 +179,7 @@ export default function OrderScreen() {
 								/>
 							)}
 							onPress={() => {
+							  setIsBottomSheetVisible(false);
 								const updatedOrder = {
 									...order,
 									items: order.items.map((item) => {
@@ -181,7 +195,6 @@ export default function OrderScreen() {
 								};
 
 								setOrder(updatedOrder);
-								setIsBottomSheetVisible(false);
 							}}
 						/>
 						<List.Item
@@ -214,7 +227,15 @@ export default function OrderScreen() {
 							onPress={() => {
 								navigation.navigate('UpdateOrder', {
 									order,
-									onUpdate: setOrder,
+									onUpdate: (updatedOrder) => {
+									  setOrders(orders.map(order => {
+                      if (order.id === updatedOrder.id) {
+                        return updatedOrder;
+                      }
+
+                      return order;
+                    }));
+									},
 								});
 								setIsBottomSheetVisible(false);
 							}}
@@ -247,6 +268,13 @@ export default function OrderScreen() {
 								/>
 							)}
 							onPress={() => {
+							  setOrders(orders.map(currentOrder => {
+                  if (order.id === currentOrder.id) {
+                    return null;
+                  }
+
+                  return order;
+                }).filter(order => order !== null));
 								navigation.goBack();
 							}}
 						/>
@@ -298,6 +326,13 @@ export default function OrderScreen() {
 								}),
 							};
 
+							setOrders(orders.map(order => {
+                      if (order.id === updatedOrder.id) {
+                        return updatedOrder;
+                      }
+
+                      return order;
+                    }));
 							setOrder(updatedOrder);
 							setIsBottomSheetVisible(false);
 						}}
@@ -336,6 +371,14 @@ export default function OrderScreen() {
 								/>
 							)}
 							onPress={() => {
+							  setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
+                
 								navigation.navigate('UpdateOrder', {
 									order,
 									onUpdate: setOrder,
@@ -370,6 +413,13 @@ export default function OrderScreen() {
 								/>
 							)}
 							onPress={() => {
+							  setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return null;
+                  }
+
+                  return order;
+                }).filter(order=> order !== null));
 								navigation.goBack();
 							}}
 						/>
@@ -425,6 +475,13 @@ export default function OrderScreen() {
 								};
 
 								setOrder(updatedOrder);
+								setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
 								setIsBottomSheetVisible(false);
 							}}
 						/>
@@ -470,6 +527,13 @@ export default function OrderScreen() {
 									}),
 								};
 
+								setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
 								setOrder(updatedOrder);
 								setIsBottomSheetVisible(false);
 							}}
@@ -500,6 +564,13 @@ export default function OrderScreen() {
 									}),
 								};
 
+								setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
 								setOrder(updatedOrder);
 								setIsBottomSheetVisible(false);
 							}}
@@ -573,6 +644,13 @@ export default function OrderScreen() {
 									}),
 								};
 
+								setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
 								setOrder(updatedOrder);
 								setIsBottomSheetVisible(false);
 							}}
@@ -627,6 +705,13 @@ export default function OrderScreen() {
 								}),
 							};
 
+							setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
 							setOrder(updatedOrder);
 							setIsBottomSheetVisible(false);
 						}}
@@ -715,6 +800,13 @@ export default function OrderScreen() {
 								};
 
 								setOrder(updatedOrder);
+								setOrders(orders.map(order => {
+                  if (order.id === updatedOrder.id) {
+                    return updatedOrder;
+                  }
+
+                  return order;
+                }));
 								setIsBottomSheetVisible(false);
 							}}
 						/>

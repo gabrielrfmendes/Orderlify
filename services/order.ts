@@ -116,7 +116,7 @@ const orders = [
 		],
 	},
 	{
-		id: 2,
+		id: 89,
 		tableNumber: 2,
 		status: 'waiting',
 		createdAt: Date.now(),
@@ -224,7 +224,7 @@ const orders = [
 		],
 	},
 	{
-		id: 3,
+		id: 97,
 		tableNumber: 7,
 		status: 'preparing',
 		createdAt: Date.now(),
@@ -332,7 +332,7 @@ const orders = [
 		],
 	},
 	{
-		id: 3,
+		id: 44,
 		tableNumber: 4,
 		status: 'preparing',
 		createdAt: Date.now(),
@@ -440,7 +440,7 @@ const orders = [
 		],
 	},
 	{
-		id: 5,
+		id: 45,
 		tableNumber: 5,
 		status: 'ready',
 		createdAt: Date.now(),
@@ -548,7 +548,7 @@ const orders = [
 		],
 	},
 	{
-		id: 6,
+		id: 623,
 		tableNumber: 6,
 		status: 'delivered',
 		createdAt: Date.now(),
