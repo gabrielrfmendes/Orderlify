@@ -25,6 +25,7 @@ import OrderScreen from './screens/Order';
 import OrderFormScreen from './screens/OrderForm';
 import OrderDetailsScreen from './screens/OrderDetails';
 import EaterySettingsScreen from './screens/EaterySettings';
+import { RequestListScreen } from './screens/EateryList';
 
 const Stack = createNativeStackNavigator();
 
@@ -74,6 +75,11 @@ function AppNavigator() {
 							component={EateryListScreen}
 							options={{ title: 'Selecionar estabelecimento' }}
 						/>
+						<Stack.Screen
+              name="Requests"
+              component={RequestListScreen}
+              options={{ title: 'Solicitações' }}
+            />
 						<Stack.Screen
 							name="NewEatery"
 							component={EateryFormScreen}
@@ -135,6 +141,11 @@ function AppNavigator() {
 							component={EateryListScreen}
 							options={{ title: 'Selecionar estabelecimento' }}
 						/>
+						<Stack.Screen
+              name="Requests"
+              component={RequestListScreen}
+              options={{ title: 'Solicitações' }}
+            />
 						<Stack.Screen
 							name="NewEatery"
 							component={EateryFormScreen}

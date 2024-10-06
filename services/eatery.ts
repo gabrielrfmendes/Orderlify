@@ -197,7 +197,10 @@ export function saveEatery(data: Eatery) {
 export function getEateries() {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			resolve({ data: { eateries } });
+			resolve({ data: {
+			  eateries,
+			  totalEateries: eateries.length,
+			} });
 
 			// reject(errorMock);
 		}, 2000);
@@ -207,7 +210,10 @@ export function getEateries() {
 export function getRequests() {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			resolve({ data: { requests } });
+			resolve({ data: {
+			  requests,
+			  total: requests.length,
+			}});
 
 			// reject(errorMock);
 		}, 2000);

@@ -16,6 +16,7 @@ import {
 	Tooltip,
 	Snackbar,
 	Portal,
+	Button,
 } from 'react-native-paper';
 import AppBackground from '../components/AppBackground';
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
@@ -29,6 +30,7 @@ import {
 	ActionSheetProvider,
 	useActionSheet,
 } from '@expo/react-native-action-sheet';
+import BottomSheet from '../components/BottomSheet';
 import { Eatery } from '../types';
 import { useEatery } from '../contexts/Eatery';
 import { useNavigation } from '@react-navigation/native';
@@ -92,17 +94,25 @@ const EateryListItem: React.FC<EateryListItemProps> = (props) => {
 	);
 };
 
-const EateriesTab: React.FC = ({ eateries, setEateries }) => {
+const EateryListScreen: React.FC = () => {
+  const [eateries, setEateries] = React.useState([]);
+  const [totalRequests, setTotalRequests] = React.useState(0);
 	const [isLoading, setIsLoading] = React.useState(true);
+	const [isBottomSheetVisible, setIsBottomSheetVisible] =
+	  React.useState(false);
 	const theme = useTheme();
 	const window = useWindowDimensions();
 	const { selectedEatery, selectEatery } = useEatery();
 	const navigation = useNavigation();
+	const { colors } = useTheme();
 
 	React.useEffect(() => {
 		const listEateries = async () => {
 			try {
 				const response = await getEateries();
+				const requestsResponse = await getRequests();
+
+				setTotalRequests(requestsResponse.data.total);
 
 				if (response.data.eateries.length) {
 					if (selectedEatery) {
@@ -157,6 +167,21 @@ const EateriesTab: React.FC = ({ eateries, setEateries }) => {
 			)}
 			{eateries?.length ? (
 				<ScrollView>
+				  <List.Item
+      title={`Solicitações (${totalRequests})`}
+      left={(leftProps) => (
+          <Avatar.Icon
+            style={[
+              leftProps.style,
+              { backgroundColor: colors.surfaceVariant },
+            ]}
+            icon="inbox"
+           size={48}
+          />
+        )}
+      onPress={() => navigation.navigate('Requests')}
+    />
+    <Divider />
 					{eateries.map((item) => (
 						<EateryListItem
 							key={item.id}
@@ -184,6 +209,70 @@ const EateriesTab: React.FC = ({ eateries, setEateries }) => {
 			) : (
 				<></>
 			)}
+			   <Tooltip title="Adicionar estabelecimento">
+          <FAB
+            icon="store-plus-outline"
+            onPress={() => setIsBottomSheetVisible(true)}
+            background={colors.primaryContainer}
+            color={colors.onPrimaryContainer}
+            style={styles.fabStyle}
+          />
+        </Tooltip>
+        <BottomSheet
+          visible={isBottomSheetVisible}
+          onRequestClose={() => setIsBottomSheetVisible(false)}
+        >
+          <List.Item title="Adicionar estabelecimento" />
+          <Divider />
+          <List.Item
+            left={(leftProps) => (
+              <View 
+                style={{
+                  backgroundColor: '#EC407A',
+                  height: 40,
+                  width: 40,
+                  borderRadius: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 12,
+                }}
+              >
+                <Icon
+                  name="store-search-outline"
+                  color="#F5F5F5"
+                  size={20}
+                />
+              </View>
+            )}
+            title="Encontrar estabelecimentos"
+            onPress={() => {
+              setIsBottomSheetVisible(false);
+              navigation.navigate('FindEateries')
+            }}
+          />
+          <List.Item
+            left={(leftProps) => (
+              <View
+                style={{
+                  backgroundColor: '#BF59CF',
+                  height: 40,
+                  width: 40,
+                  borderRadius: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: 12,
+                }}
+              >
+                <Icon name="store-plus-outline" color="#F5F5F5" size={20} />
+              </View>
+            )}
+            title="Cadastrar estabelecimento"
+            onPress={() => {
+              setIsBottomSheetVisible(false);
+              navigation.navigate('NewEatery');
+            }}
+          />
+        </BottomSheet>
 		</AppBackground>
 	);
 };
@@ -228,7 +317,8 @@ const RequestListItem: React.FC<RequestListItemProps> = (props) => {
 	);
 };
 
-const RequestsTab: React.FC = ({ requests, setRequests, setEateries }) => {
+export function RequestListScreen({ setEateries }) {
+  const [requests, setRequests] = React.useState();
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [snackbarMessageVisible, setIsSnackbarMessageVisible] =
 		React.useState(false);
@@ -250,14 +340,6 @@ const RequestsTab: React.FC = ({ requests, setRequests, setEateries }) => {
 		};
 		listRequests();
 	}, []);
-
-	React.useEffect(() => {
-		if (requests.length > 0) {
-			navigation.setOptions({ title: 'Solicitações ●' });
-		} else {
-			navigation.setOptions({ title: 'Solicitações' });
-		}
-	}, [requests]);
 
 	const showActionSheet = (request) => {
 		const actionSheetOptions = ['Aceitar solicitação', 'Excluir'];
@@ -392,7 +474,7 @@ const RequestsTab: React.FC = ({ requests, setRequests, setEateries }) => {
 	);
 };
 
-const EateryListScreen: React.FC = () => {
+const OldEateryListScreen: React.FC = () => {
 	const { colors } = useTheme();
 	const { showActionSheetWithOptions } = useActionSheet();
 	const navigation = useNavigation();
