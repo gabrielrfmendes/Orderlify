@@ -25,7 +25,8 @@ import OrderScreen from './screens/Order';
 import OrderFormScreen from './screens/OrderForm';
 import OrderDetailsScreen from './screens/OrderDetails';
 import EaterySettingsScreen from './screens/EaterySettings';
-import { RequestListScreen } from './screens/EateryList';
+import RequestListScreen from './screens/RequestList';
+import SignUp from './screens/SignUp';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,10 +41,7 @@ function HomeHeader() {
 				onPress={() => navigation.navigate('Eateries')}
 			/>
 			<Appbar.Action
-				icon={props => <MaterialIcon
-				  name="restaurant-menu"
-				  {...props}
-				/>}
+				icon={(props) => <MaterialIcon name="restaurant-menu" {...props} />}
 				onPress={() => navigation.navigate('Menu')}
 			/>
 		</Appbar.Header>
@@ -62,10 +60,10 @@ function AppNavigator() {
 					animation: 'slide_from_right',
 				}}
 			>
-				{!accessToken ? (
+				{true ? (
 					<Stack.Screen
 						name="Auth"
-						component={Auth}
+						component={SignUp}
 						options={{ headerShown: false }}
 					/>
 				) : !selectedEatery ? (
@@ -76,10 +74,10 @@ function AppNavigator() {
 							options={{ title: 'Selecionar estabelecimento' }}
 						/>
 						<Stack.Screen
-              name="Requests"
-              component={RequestListScreen}
-              options={{ title: 'Solicitações' }}
-            />
+							name="Requests"
+							component={RequestListScreen}
+							options={{ title: 'Solicitações' }}
+						/>
 						<Stack.Screen
 							name="NewEatery"
 							component={EateryFormScreen}
@@ -106,9 +104,9 @@ function AppNavigator() {
 							}}
 						/>
 						<Stack.Screen
-						  name="EaterySettings"
-						  component={EaterySettingsScreen}
-						  options={{ title: 'Configurações' }}
+							name="EaterySettings"
+							component={EaterySettingsScreen}
+							options={{ title: 'Configurações' }}
 						/>
 						<Stack.Screen
 							name="CreateDeliveryOrder"
@@ -130,11 +128,11 @@ function AppNavigator() {
 							}}
 						/>
 						<Stack.Screen
-						  name="OrderDetails"
-						  component={OrderDetailsScreen}
-						  options={{
-						    title: 'Detalhes do pedido'
-						  }}
+							name="OrderDetails"
+							component={OrderDetailsScreen}
+							options={{
+								title: 'Detalhes do pedido',
+							}}
 						/>
 						<Stack.Screen
 							name="Eateries"
@@ -142,10 +140,10 @@ function AppNavigator() {
 							options={{ title: 'Selecionar estabelecimento' }}
 						/>
 						<Stack.Screen
-              name="Requests"
-              component={RequestListScreen}
-              options={{ title: 'Solicitações' }}
-            />
+							name="Requests"
+							component={RequestListScreen}
+							options={{ title: 'Solicitações' }}
+						/>
 						<Stack.Screen
 							name="NewEatery"
 							component={EateryFormScreen}
