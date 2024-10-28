@@ -4,13 +4,11 @@ import OrderListItem from '../components/OrderListItem';
 import { useRoute } from '@react-navigation/native';
 
 export default function OrderDetails() {
-  const route = useRoute();
-  
-  return (
-    <AppBackground>
-      <OrderListItem
-        item={route.params.order}
-      />    
-    </AppBackground>
-  );
+	const route = useRoute();
+
+	return (
+		<AppBackground>
+			<OrderListItem item={route.params.order} />
+		</AppBackground>
+	);
 }

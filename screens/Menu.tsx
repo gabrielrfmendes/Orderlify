@@ -96,41 +96,42 @@ export default function MenuScreen() {
 				) : (
 					<>
 						{menuItems.map((menuItem) => {
-						if (!menuItem.price) {
-						  return;
-						}
-						return (
-							<MenuListItem
-								key={menuItem.id}
-								menuItem={menuItem}
-								onUpdate={(updates) => {
-									setMenuItems(
-										menuItems.map((item) => {
-											if (item.id === menuItem.id) {
-												return {
-													...item,
-													...updates,
-												};
-											}
-											return item;
-										})
-									);
-								}}
-								onDelete={async () => {
-									setIsDeleting(true);
-									await deleteMenuItem({ id: menuItem.id });
-									setIsDeleting(false);
-									setMenuItems(
-										menuItems.filter((item) => {
-											if (item.id !== menuItem.id) {
+							if (!menuItem.price) {
+								return;
+							}
+							return (
+								<MenuListItem
+									key={menuItem.id}
+									menuItem={menuItem}
+									onUpdate={(updates) => {
+										setMenuItems(
+											menuItems.map((item) => {
+												if (item.id === menuItem.id) {
+													return {
+														...item,
+														...updates,
+													};
+												}
 												return item;
-											}
-											return;
-										})
-									);
-								}}
-							/>
-						)})}
+											})
+										);
+									}}
+									onDelete={async () => {
+										setIsDeleting(true);
+										await deleteMenuItem({ id: menuItem.id });
+										setIsDeleting(false);
+										setMenuItems(
+											menuItems.filter((item) => {
+												if (item.id !== menuItem.id) {
+													return item;
+												}
+												return;
+											})
+										);
+									}}
+								/>
+							);
+						})}
 						<Divider
 							style={{
 								marginHorizontal: 16,

@@ -26,7 +26,9 @@ import OrderFormScreen from './screens/OrderForm';
 import OrderDetailsScreen from './screens/OrderDetails';
 import EaterySettingsScreen from './screens/EaterySettings';
 import RequestListScreen from './screens/RequestList';
-import SignUp from './screens/SignUp';
+import WelcomeScreen from './screens/Welcome';
+import SignUpFormScreen from './screens/SignUpForm';
+import SignInFormScreen from './screens/SignInForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -60,12 +62,24 @@ function AppNavigator() {
 					animation: 'slide_from_right',
 				}}
 			>
-				{true ? (
+				{!accessToken ? (
+				  <>
+				  <Stack.Screen
+				    name="Welcome"
+				    component={WelcomeScreen}
+				    options={{ headerShown: false }}
+				  />
 					<Stack.Screen
-						name="Auth"
-						component={SignUp}
+						name="SignUp"
+						component={SignUpFormScreen}
 						options={{ headerShown: false }}
 					/>
+					<Stack.Screen
+            name="SignIn"
+            component={SignInFormScreen}
+            options={{ headerShown: false }}
+          />
+				  </>
 				) : !selectedEatery ? (
 					<>
 						<Stack.Screen

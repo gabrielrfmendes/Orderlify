@@ -10,28 +10,28 @@ function convertToValidJSON(inputString) {
 }
 
 export default function generateOrder({
-  orderText,
-  menuItems,
-  flavors,
-  stuffedCrusts,
-  extras,
+	orderText,
+	menuItems,
+	flavors,
+	stuffedCrusts,
+	extras,
 }) {
-  const data = {
-    contents: [
-      {
-        role: "user",
-        parts: [
-          {
-            text: orderText, 
-          }
-        ]
-      }
-    ],
-    systemInstruction: {
-      role: "user",
-      parts: [
-        {
-          text: `Você é um sistema que converte pedidos de restaurante escritos em linguagem natural para uma estrutura de dados JSON abaixo:
+	const data = {
+		contents: [
+			{
+				role: 'user',
+				parts: [
+					{
+						text: orderText,
+					},
+				],
+			},
+		],
+		systemInstruction: {
+			role: 'user',
+			parts: [
+				{
+					text: `Você é um sistema que converte pedidos de restaurante escritos em linguagem natural para uma estrutura de dados JSON abaixo:
 interface {
   formatedPrompt?: string;
   orderBody?: {
@@ -168,29 +168,32 @@ Regras importantes:
 2. Omita da estrutura e da formatação do prompt os campos opcionais não fornecidos.
 3. Se o tamanho da pizza for omitida no pedido, considere que seja uma pizza grande, se os flavors descritos estiverem disponiveis, utilize o id deles em flavorId.
 4. Não inclua emojis ou perguntas na resposta no formatedPrompt, apenas o prompt formatado como nos exemplos.
-`
-        }
-      ]
-    },
-    generationConfig: {
-      temperature: 1,
-      topK: 64,
-      topP: 0.95,
-      maxOutputTokens: 8192,
-      responseMimeType: "text/plain"
-    }
-  };
+`,
+				},
+			],
+		},
+		generationConfig: {
+			temperature: 1,
+			topK: 64,
+			topP: 0.95,
+			maxOutputTokens: 8192,
+			responseMimeType: 'text/plain',
+		},
+	};
 
-  return axios.post(url, data, {
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  })
-  .then(response => {
-    console.log(response.data.candidates[0].content.parts[0].text);
-    return convertToValidJSON(response.data.candidates[0].content.parts[0].text);
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+	return axios
+		.post(url, data, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+		.then((response) => {
+			console.log(response.data.candidates[0].content.parts[0].text);
+			return convertToValidJSON(
+				response.data.candidates[0].content.parts[0].text
+			);
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
 }

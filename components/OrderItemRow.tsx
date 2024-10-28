@@ -103,6 +103,8 @@ interface OrderItemRowProps extends OrderItem {
 
 export default function OrderItemRow(props: OrderItemRowProps) {
 	const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
+	const [isEditorBottomSheetVisible, setIsEditorBottomSheetVisible] =
+		useState(false);
 	const { colors } = useTheme();
 	const { selectedEatery } = useEatery();
 	const navigation = useNavigation();
@@ -304,11 +306,8 @@ export default function OrderItemRow(props: OrderItemRowProps) {
 								/>
 							)}
 							onPress={() => {
-								navigation.navigate('UpdateOrderItem', {
-									orderItem,
-									onUpdate,
-								});
 								setIsBottomSheetVisible(false);
+								setIsEditorBottomSheetVisible(true);
 							}}
 						/>
 						<List.Item
@@ -421,10 +420,8 @@ export default function OrderItemRow(props: OrderItemRowProps) {
 								/>
 							)}
 							onPress={() => {
-								navigation.navigate('UpdateOrderItem', {
-									orderItem,
-									onUpdate,
-								});
+								setIsBottomSheetVisible(false);
+								setIsEditorBottomSheetVisible(true);
 							}}
 						/>
 						<List.Item
@@ -651,11 +648,8 @@ export default function OrderItemRow(props: OrderItemRowProps) {
 										/>
 									)}
 									onPress={() => {
-										navigation.navigate('UpdateOrderItem', {
-											orderItem,
-											onUpdate,
-										});
 										setIsBottomSheetVisible(false);
+										setIsEditorBottomSheetVisible(true);
 									}}
 								/>
 								<List.Item

@@ -6,12 +6,14 @@ const errorMock = {
 	},
 };
 
+const timestamp = Math.floor(Date.now() / 1000) - 2 * 60 * 60;
+
 const orders = [
 	{
 		id: 1,
 		tableNumber: 1,
 		status: 'waiting',
-		createdAt: Date.now(),
+		createdAt: timestamp,
 		createdBy: {
 			id: 69,
 			name: 'Roberto',

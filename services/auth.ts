@@ -1,7 +1,7 @@
 /* eslint-disable */
 const errorMock = {
 	response: {
-		status: 404, // or 500
+		status: 401, // 404, 409 or 500
 		data: null,
 	},
 };
@@ -14,9 +14,9 @@ const authDataMock = {
 export function validateEmail(email: string) {
 	const dataMock = {
 		user: {
-			name: 'Gabriel',
-			pictureUri:
-				'https://pbs.twimg.com/media/GBqyoM4WkAAKTS6?format=jpg&name=medium', // or null
+			firstName: 'Charles',
+			lastName: 'Gabriel',
+			username: 'charlesgabriel',
 		},
 	};
 
@@ -30,26 +30,29 @@ export function validateEmail(email: string) {
 }
 
 export function createAccount(accountData: {
-	name: string;
-	pictureUri?: string;
-	email: string;
+	firstName: string;
+	lastName: string;
+	username: string;
 	password: string;
 }) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
-			resolve({ data: authDataMock });
+		  // reject(errorMock);
+			resolve({ data: {
+			  user: accountData,
+			  accessToken: authDataMock.accessToken,
+			}});
 
-			//reject(errorMock);
-		}, 2000);
+		}, 5000);
 	});
 }
 
 export function authenticate(credentials: { email: string; password: string }) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
+		  // reject(errorMock);
+					
 			resolve({ data: authDataMock });
-
-			//reject(errorMock);
 		}, 2000);
 	});
 }

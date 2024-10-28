@@ -26,13 +26,8 @@ export default function Home() {
 	const [isTableSelectorModalVisible, setIsTableSelectorModalVisible] =
 		useState(false);
 	const { colors } = useTheme();
-	const {
-	  selectedEatery,
-	  newOrder,
-	  setNewOrder,
-	  orders,
-	  setOrders,
-	} = useEatery();
+	const { selectedEatery, newOrder, setNewOrder, orders, setOrders } =
+		useEatery();
 	const navigation = useNavigation();
 
 	useEffect(() => {

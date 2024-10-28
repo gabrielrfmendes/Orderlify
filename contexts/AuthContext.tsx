@@ -21,6 +21,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 	useEffect(() => {
 		const loadAccessToken = async () => {
 			const storedToken = await AsyncStorage.getItem('accessToken');
+
 			if (storedToken) {
 				setAccessToken(storedToken);
 			}

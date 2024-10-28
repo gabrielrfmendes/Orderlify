@@ -104,7 +104,7 @@ const menuItems: MenuItem[] = [
 		status: 'available',
 		availability: 'preparationRequired',
 	},
-	
+
 	{
 		id: 4,
 		name: 'AC/DCheese',
