@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import AppBackground from '../../components/AppBackground';
+import AppBackground from './AppBackground';
 import {
 	Modal,
 	View,

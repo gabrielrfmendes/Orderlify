@@ -29,6 +29,7 @@ import RequestListScreen from './screens/RequestList';
 import WelcomeScreen from './screens/Welcome';
 import SignUpFormScreen from './screens/SignUpForm';
 import SignInFormScreen from './screens/SignInForm';
+import AddToOrderScreen from './screens/AddToOrder';
 
 const Stack = createNativeStackNavigator();
 
@@ -183,6 +184,7 @@ function AppNavigator() {
 							component={MenuItemFormScreen}
 							options={{ title: 'Novo produto' }}
 						/>
+						
 						<Stack.Group
 							screenOptions={{
 								presentation: 'modal',
@@ -195,6 +197,11 @@ function AppNavigator() {
 								component={MenuItemScreen}
 								options={{ headerShown: false }}
 							/>
+							<Stack.Screen
+                name="AddToOrder"
+                component={AddToOrderScreen}
+                options={{ title: 'Adicionar ao pedido' }}
+              />
 						</Stack.Group>
 					</>
 				)}

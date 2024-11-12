@@ -15,10 +15,12 @@ function getTotalQuantity(orderDetails: OrderItem['details']) {
 }
 
 interface MenuListItemProps {
+  order: Order;
 	menuItem: MenuItem;
 	orderDetails: OrderItem['details'];
 	onUpdate: (menuItem: MenuItem) => void;
 	onDelete: () => void;
+	onPress?: () => void;
 }
 
 export default function MenuListItem(props: MenuListItemProps) {
@@ -27,7 +29,7 @@ export default function MenuListItem(props: MenuListItemProps) {
 
 	return (
 		<List.Item
-			onPress={() => navigation.navigate('MenuItem', { ...props })}
+			onPress={props?.onPress}
 			style={{ paddingVertical: 0 }}
 			title={props.menuItem.name}
 			description={formatMonetaryValue(props.menuItem.price)}
@@ -60,17 +62,6 @@ export default function MenuListItem(props: MenuListItemProps) {
 					)}
 				</View>
 			)}
-			right={() => {
-				if (props.orderDetails) {
-					return (
-						<Badge style={{ backgroundColor: colors.primary }}>
-							{getTotalQuantity(props.orderDetails)}
-						</Badge>
-					);
-				}
-
-				return;
-			}}
 		/>
 	);
 }

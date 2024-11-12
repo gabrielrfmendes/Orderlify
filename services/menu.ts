@@ -179,11 +179,11 @@ export function getMenuItems() {
 					extras,
 				},
 			});
-		}, 2000);
+		}, 1000);
 	});
 }
 
-export function saveMenuItem(data: any) {
+export function saveMenuItem(data: object) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve({
@@ -192,11 +192,11 @@ export function saveMenuItem(data: any) {
 					pictureUri: data?.picture?.uri || null,
 				},
 			});
-		}, 2000);
+		}, 1000);
 	});
 }
 
-export function updateMenuItem(data: any) {
+export function updateMenuItem(data: object) {
 	return new Promise((resolve, reject) => {
 		const update = {};
 
@@ -212,7 +212,7 @@ export function updateMenuItem(data: any) {
 	});
 }
 
-export function deleteMenuItem(data: any) {
+export function deleteMenuItem(data: object) {
 	return new Promise((resolve, reject) => {
 		setTimeout(() => {
 			resolve();

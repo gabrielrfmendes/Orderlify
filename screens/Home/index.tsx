@@ -16,7 +16,7 @@ import { getActiveOrders } from '../../services/order';
 import BottomSheet from '../../components/BottomSheet';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import TableSelectorModal from './TableSelectorModal';
+import NewOrderBottomSheet from '../../components/NewOrderBottomSheet';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -120,137 +120,18 @@ export default function Home() {
 							bottom: 16,
 							right: 16,
 						}}
-						onPress={() => navigation.navigate('OrderForm')}
+						onPress={() => navigation.navigate('Order', {
+						  order: newOrder,
+						})}
 					/>
 				)
 			) : (
 				<></>
 			)}
-			<TableSelectorModal
-				visible={isTableSelectorModalVisible}
-				onRequestClose={() => setIsTableSelectorModalVisible(false)}
-				orders={orders}
-				onSelectTable={(tableNumber) => {
-					setNewOrder({
-						tableNumber,
-					});
-					navigation.navigate('OrderForm');
-				}}
+			<NewOrderBottomSheet
+			  visible={isBottomSheetVisible}
+			  onRequestClose={() => setIsBottomSheetVisible(false)}
 			/>
-			<BottomSheet
-				visible={isBottomSheetVisible}
-				onRequestClose={() => setIsBottomSheetVisible(false)}
-			>
-				<View style={{ flex: 1 }}>
-					<Text
-						variant="titleMedium"
-						style={{
-							marginLeft: 16,
-							color: colors.onSurface,
-							marginTop: 16,
-							marginBottom: 8,
-						}}
-					>
-						Tipo do pedido
-					</Text>
-					<List.Item
-						title="Mesa"
-						titleStyle={{
-							color: colors.onSurface,
-						}}
-						left={(props) => (
-							<List.Icon
-								{...props}
-								icon={(props) => (
-									<View
-										style={{
-											backgroundColor: 'crimson',
-											height: 40,
-											width: 40,
-											borderRadius: 20,
-											alignItems: 'center',
-											justifyContent: 'center',
-										}}
-									>
-										<MaterialIcons
-											name="table-bar"
-											{...props}
-											color={colors.surfaceVariant}
-										/>
-									</View>
-								)}
-							/>
-						)}
-						onPress={() => {
-							setIsBottomSheetVisible(false);
-							setIsTableSelectorModalVisible(true);
-						}}
-					/>
-					<List.Item
-						title="Delivery"
-						titleStyle={{
-							color: colors.onSurface,
-						}}
-						left={(props) => (
-							<List.Icon
-								{...props}
-								icon={(props) => (
-									<View
-										style={{
-											backgroundColor: '#EC407A',
-											height: 40,
-											width: 40,
-											borderRadius: 20,
-											alignItems: 'center',
-											justifyContent: 'center',
-										}}
-									>
-										<MaterialIcons
-											name="delivery-dining"
-											{...props}
-											color={colors.surfaceVariant}
-										/>
-									</View>
-								)}
-							/>
-						)}
-						onPress={() => {
-							bottomSheetModalRef.current.dismiss();
-							navigation.navigate('OrderForm');
-						}}
-					/>
-					<List.Item
-						title="Balcão"
-						titleStyle={{
-							color: colors.onSurface,
-						}}
-						left={(props) => (
-							<List.Icon
-								{...props}
-								icon={(props) => (
-									<View
-										style={{
-											backgroundColor: '#BF59CF',
-											height: 40,
-											width: 40,
-											borderRadius: 20,
-											alignItems: 'center',
-											justifyContent: 'center',
-										}}
-									>
-										<MaterialIcons
-											name="local-bar"
-											{...props}
-											color={colors.surfaceVariant}
-										/>
-									</View>
-								)}
-							/>
-						)}
-						onPress={() => navigation.navigate('OrderForm')}
-					/>
-				</View>
-			</BottomSheet>
 		</AppBackground>
 	);
 }

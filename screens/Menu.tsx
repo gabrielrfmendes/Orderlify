@@ -18,7 +18,7 @@ import {
 import { MaterialCommunityIcons as Icon } from '@expo/vector-icons';
 import { getMenuItems, deleteMenuItem } from '../services/menu';
 import { formatMonetaryValue } from '../utils';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import MenuListItem from '../components/MenuListItem';
 
 export default function MenuScreen() {
@@ -28,6 +28,7 @@ export default function MenuScreen() {
 	const { colors } = useTheme();
 	const window = useWindowDimensions();
 	const navigation = useNavigation();
+	const route = useRoute();
 
 	useEffect(() => {
 		async function listMenuItems() {
@@ -102,6 +103,7 @@ export default function MenuScreen() {
 							return (
 								<MenuListItem
 									key={menuItem.id}
+									order={route.params.order}
 									menuItem={menuItem}
 									onUpdate={(updates) => {
 										setMenuItems(
@@ -129,6 +131,11 @@ export default function MenuScreen() {
 											})
 										);
 									}}
+									onPress={() => navigation.navigate('MenuItem', {
+                    menuItem: menuItem,
+                    order: route.params.order,
+                    ...menuItem,
+                  })}
 								/>
 							);
 						})}

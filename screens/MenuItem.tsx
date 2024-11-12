@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
 	useWindowDimensions,
 	ImageBackground,
@@ -11,15 +11,34 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import AppBackground from '../components/AppBackground';
 import { formatMonetaryValue } from '../utils';
+import { useEatery } from '../contexts/Eatery';
+import NewOrderBottomSheet from '../components/NewOrderBottomSheet';
 
 export default function MenuItemScreen() {
+  const [isNewOrderBottomSheetVisible, setIsNewOrderBottomSheetVisible] = useState(false);
+  const [isAddToOrderBottomSheetVisible, setIsAddToOrderBottomSheetVisible] = useState(false);
 	const window = useWindowDimensions();
 	const route = useRoute();
 	const { colors } = useTheme();
 	const navigation = useNavigation();
+	const { newOrder, setNewOrder } = useEatery();
+
+	function handleAddToOrder() {
+	  setIsAddToOrderBottomSheetVisible(true);
+	}
+
+	function handleCreateOrder() {
+	  setIsNewOrderBottomSheetVisible(true);
+	}
 
 	return (
 		<AppBackground>
+		  <NewOrderBottomSheet
+		    visible={isNewOrderBottomSheetVisible}
+		    onRequestClose={() => {
+		      setIsNewOrderBottomSheetVisible(false);
+		    }}
+		  />
 			<ImageBackground
 				style={{
 					height: window.width,
@@ -43,6 +62,7 @@ export default function MenuItemScreen() {
 						alignItems: 'center',
 						justifyContent: 'center',
 					}}
+					onPress={() => navigation.goBack()}
 				>
 					<MaterialCommunityIcons name="close" size={24} color="white" />
 				</TouchableOpacity>
@@ -144,16 +164,33 @@ export default function MenuItemScreen() {
 					/>
 				</View>
 			</View>
-			{/*<View
+			<View
 				style={{
 					paddingVertical: 16,
 					paddingHorizontal: 32,
 				}}
 			>
-				<Button mode="contained">
-				  Adicionar ao pedido
-				</Button>
-			</View>*/}
+			  {route.params.order ? (
+				  <Button
+				    mode="contained"
+				    onPress={() => {
+              navigation.navigate('AddToOrder', {
+                menuItem: route.params.menuItem,
+                order: route.params.order,
+              });
+            }}
+				  >
+				    Adicionar ao pedido
+				  </Button>
+				) : (
+				  <Button
+            mode="contained"
+            onPress={handleCreateOrder}
+          >
+            Criar pedido
+          </Button>
+				)}
+			</View>
 		</AppBackground>
 	);
 }

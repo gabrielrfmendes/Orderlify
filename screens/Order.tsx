@@ -8,6 +8,7 @@ import {
 	Divider,
 	Appbar,
 	Button,
+	FAB,
 } from 'react-native-paper';
 import { formatMonetaryValue } from '../utils';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -841,7 +842,7 @@ export default function OrderScreen() {
 	return (
 		<AppBackground>
 			<ScrollView contentContainerStyle={{ flex: 1 }}>
-				{order?.items.length === 0 ? (
+				{!order?.items?.length ? (
 					<View
 						style={{
 							flex: 1,
@@ -875,7 +876,7 @@ export default function OrderScreen() {
 				) : (
 					<>
 						{order?.items
-							.map((orderItem, index) => {
+							?.map((orderItem, index) => {
 								if (
 									selectedEatery.memberRole === 'chef' &&
 									orderItem.menuItem.availability === 'readyToDelivery'
@@ -912,7 +913,7 @@ export default function OrderScreen() {
 
 															return orderItem;
 														})
-														.filter((orderItem) => orderItem !== null),
+														?.filter((orderItem) => orderItem !== null),
 												};
 
 												setOrder(updatedOrder);
@@ -921,7 +922,7 @@ export default function OrderScreen() {
 									</React.Fragment>
 								);
 							})
-							.filter((orderItem) => orderItem !== null)}
+							?.filter((orderItem) => orderItem !== null)}
 						<Divider
 							style={{
 								marginHorizontal: 16,
@@ -943,6 +944,17 @@ export default function OrderScreen() {
 					</>
 				)}
 			</ScrollView>
+			<FAB
+        icon="hamburger-plus"
+        style={{
+          position: 'absolute',
+          bottom: 16 + 72 + 16,
+          right: 16,
+        }}
+        onPress={() => navigation.navigate('Menu', {
+          order: order,
+        })}
+      />
 			<View
 				style={{
 					position: 'absolute',
@@ -973,7 +985,7 @@ export default function OrderScreen() {
 					mode="contained"
 					onPress={() => setIsBottomSheetVisible(true)}
 					loading={isLoading}
-					disabled={isLoading}
+					disabled={isLoading || !order?.items?.length}
 					icon={
 						['preparing'].includes(order?.status)
 							? 'clock-time-five-outline'
@@ -981,10 +993,12 @@ export default function OrderScreen() {
 								? 'check'
 								: order?.status === 'delivered'
 									? 'check-all'
-									: 'clock-time-three-outline'
+									: order?.status === 'waiting' ?
+									  'clock-time-three-outline'
+									  : 'check'
 					}
 				>
-					{isLoading ? '' : order?.status ? translateStatus(order.status) : ''}
+					{isLoading ? '' : order?.status ? translateStatus(order.status) : 'Confirmar pedido'}
 				</Button>
 			</View>
 			<BottomSheet

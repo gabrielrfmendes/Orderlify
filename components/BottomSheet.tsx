@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	Button,
 	BackHandler,
+	Keyboard
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { BottomSheetModal, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
@@ -23,7 +24,7 @@ export default function BottomSheet(props: Props) {
 	const window = useWindowDimensions();
 	const { colors } = useTheme();
 
-	useEffect(() => {
+	/*useEffect(() => {
 		if (props.visible) {
 			bottomSheetModalRef.current?.present();
 		} else {
@@ -45,7 +46,47 @@ export default function BottomSheet(props: Props) {
 		);
 
 		return () => backHandler.remove();
-	}, [props.visible]);
+	}, [props.visible]);*/
+
+	useEffect(() => {
+  if (props.visible) {
+    bottomSheetModalRef.current?.present();
+  } else {
+    bottomSheetModalRef.current?.dismiss();
+  }
+
+  const backAction = () => {
+    if (props.visible) {
+      props.onRequestClose();
+      return true;
+    }
+    return false;
+  };
+
+  const backHandler = BackHandler.addEventListener(
+    'hardwareBackPress',
+    backAction
+  );
+
+  return () => backHandler.remove();
+}, [props.visible, props.onRequestClose]);
+
+useEffect(() => {
+  const keyboardShowListener = Keyboard.addListener('keyboardDidShow', () => {
+    bottomSheetModalRef.current?.present();
+  });
+
+  const keyboardHideListener = Keyboard.addListener('keyboardDidHide', () => {
+    if (!props.visible) {
+      bottomSheetModalRef.current?.dismiss();
+    }
+  });
+
+  return () => {
+    keyboardShowListener.remove();
+    keyboardHideListener.remove();
+  };
+}, [props.visible]);
 
 	const handleLayout = (event) => {
 		const { height } = event.nativeEvent.layout;
